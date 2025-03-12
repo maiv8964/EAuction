@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ItemDAO {
 	public List<Item> readAll() {
-		String sql = "SELECT id, name, condition, price, description FROM items";
+		String sql = "SELECT id, name, condition, price, description, auctionType, sellerId FROM items";
 		List<Item> items = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect();
@@ -20,6 +20,8 @@ public class ItemDAO {
 				item.setCondition(rs.getString("condition"));
 				item.setPrice(rs.getFloat("price"));
 				item.setDescription(rs.getString("description"));
+				item.setAuctionType(rs.getString("auctionType"));
+				item.setSellerId(rs.getInt("sellerId"));
 				items.add(item);
 			}
 		} catch (SQLException e) {
@@ -30,13 +32,15 @@ public class ItemDAO {
 
 	public void create(Item item) {
 
-		String sql = "INSERT INTO items(name, condition, price, description) VALUES(?,?,?,?)";
+		String sql = "INSERT INTO items(name, condition, price, description, auctionType, sellerId) VALUES(?,?,?,?,?,?)";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
 			pstmt.setString(2, item.getCondition());
 			pstmt.setFloat(3, item.getPrice());
 			pstmt.setString(4, item.getDescription());
+			pstmt.setString(5, item.getAuctionType());
+			pstmt.setInt(6, item.getSellerId());
 			pstmt.executeUpdate();
 			System.out.println("Added item.");
 		} catch (SQLException e) {
@@ -60,6 +64,8 @@ public class ItemDAO {
 					item.setCondition(rs.getString("condition"));
 					item.setPrice(rs.getFloat("price"));
 					item.setDescription(rs.getString("description"));
+					item.setAuctionType(rs.getString("auctionType"));
+					item.setSellerId(rs.getInt("sellerId"));
 				}
 			}
 		} catch (SQLException e) {
@@ -102,7 +108,7 @@ public class ItemDAO {
 
 	public void update(int id, Item item) {
 
-		String sql = "UPDATE items SET name = ?, condition = ?, price = ?, description = ? WHERE id = ?";
+		String sql = "UPDATE items SET name = ?, condition = ?, price = ?, description = ? WHERE id = ?"; //Jordi: I'm deliberately going to not allow the update of the auctionType and sellerId
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
