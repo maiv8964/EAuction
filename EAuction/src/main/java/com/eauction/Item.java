@@ -7,6 +7,8 @@ public class Item {
 	private String condition;
 	private float price;
 	private String description;
+	private String auctionType;
+	private Integer sellerId;
 
 	public int getId() {
 		return id;
@@ -46,6 +48,22 @@ public class Item {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getAuctionType() {
+		return auctionType;
+	}
+
+	public void setAuctionType(String auctionType) {
+		this.auctionType = auctionType;
+	}
+
+	public Integer getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(Integer sellerId) {
+		this.sellerId = sellerId;
 	}
 
 }
