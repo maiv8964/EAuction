@@ -2,9 +2,9 @@ package com.eauction;
 
 import java.sql.*;
 
-public class ShippingDAO {
-    
-    // Create Shipping Entry
+public class ShippingDAO implements ShippingInterface {
+
+    @Override
     public void createShipping(Shipping shipping) {
         String sql = "INSERT INTO shipping (userId, itemId, shippingAddress, trackingNumber, estimatedDelivery) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -19,7 +19,7 @@ public class ShippingDAO {
         }
     }
 
-    // Get Shipping by ID
+    @Override
     public Shipping getShipping(int id) {
         String sql = "SELECT * FROM shipping WHERE id = ?";
         Shipping shipping = null;
@@ -41,7 +41,7 @@ public class ShippingDAO {
         return shipping;
     }
 
-    // Update Shipping Entry
+    @Override
     public void updateShipping(int id, Shipping shipping) {
         String sql = "UPDATE shipping SET userId = ?, itemId = ?, shippingAddress = ?, trackingNumber = ?, estimatedDelivery = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

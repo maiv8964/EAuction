@@ -2,9 +2,9 @@ package com.eauction;
 
 import java.sql.*;
 
-public class ReceiptDAO {
-    
-    // Create Receipt
+public class ReceiptDAO implements ReceiptInterface {
+
+    @Override
     public void createReceipt(Receipt receipt) {
         String sql = "INSERT INTO receipts (userId, paymentId, dateIssued, totalAmount) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -18,7 +18,7 @@ public class ReceiptDAO {
         }
     }
 
-    // Get Receipt by ID
+    @Override
     public Receipt getReceipt(int id) {
         String sql = "SELECT * FROM receipts WHERE id = ?";
         Receipt receipt = null;
@@ -39,7 +39,7 @@ public class ReceiptDAO {
         return receipt;
     }
 
-    // Update Receipt
+    @Override
     public void updateReceipt(int id, Receipt receipt) {
         String sql = "UPDATE receipts SET userId = ?, paymentId = ?, dateIssued = ?, totalAmount = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
