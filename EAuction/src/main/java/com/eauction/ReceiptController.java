@@ -13,4 +13,19 @@ public class ReceiptController {
     public void generateReceipt(Receipt receipt) {
         receiptDAO.createReceipt(receipt);
     }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Receipt getReceipt(@PathParam("id") int id) {
+        return receiptDAO.getReceipt(id);
+    }
+
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void updateReceipt(@PathParam("id") int id, Receipt receipt) {
+        receiptDAO.updateReceipt(id, receipt);
+    }
 }
