@@ -33,7 +33,7 @@ public class AuctionDAO implements AuctionInterface{
     }
     
     @Override
-	public void update(int id, Auction auction) {
+	public void placeBid(int id, Auction auction) {
 	        String selectSql = "SELECT currentPrice, auctionStatus, auctionType FROM items WHERE id = ?";
 	        String updateSql = "UPDATE items SET currentPrice = ?, highestBidderId = ?, auctionStatus = ? WHERE id = ?";
 	

@@ -47,6 +47,6 @@ public class AuctionController {
      @Consumes(MediaType.APPLICATION_JSON)
      @Produces(MediaType.APPLICATION_JSON)
      public void update(@PathParam("id") int id, Auction auction) {
-         auctionDAO.update(id, auction);
+         auctionDAO.placeBid(id, auction);
      }     
 }
