@@ -28,7 +28,7 @@ public class UserController {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User loginUser(@Context HttpServletRequest request, User user) {
+	public User logInUser(@Context HttpServletRequest request, User user) {
 		
 		User loggedInAccount = userDAO.login(user.getUsername(), user.getPassword());
 		
@@ -45,14 +45,14 @@ public class UserController {
 	@Path("/register")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User createUser(User user) {
+	public User registerUser(User user) {
 		return userDAO.create(user);
 	}
 
 	@GET
 	@Path("/profile/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public User getUser(@PathParam("id") int id) {
+	public User userProfile(@PathParam("id") int id) {
 		return userDAO.read(id);
 	}
 
@@ -60,7 +60,7 @@ public class UserController {
 	@Path("/profile/update/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User updateUser(@PathParam("id") int id, User user) {
+	public User updateUserProfile(@PathParam("id") int id, User user) {
 		return userDAO.update(id, user);
 	}
 
