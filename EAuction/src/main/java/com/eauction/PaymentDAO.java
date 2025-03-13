@@ -2,7 +2,9 @@ package com.eauction;
 
 import java.sql.*;
 
-public class PaymentDAO {
+public class PaymentDAO implements PaymentInterface {
+
+    @Override
     public void createPayment(Payment payment) {
         String sql = "INSERT INTO payments (userId, itemId, amountPaid, paymentMethod, paymentStatus) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -17,6 +19,7 @@ public class PaymentDAO {
         }
     }
 
+    @Override
     public Payment getPayment(int id) {
         String sql = "SELECT * FROM payments WHERE id = ?";
         Payment payment = null;
