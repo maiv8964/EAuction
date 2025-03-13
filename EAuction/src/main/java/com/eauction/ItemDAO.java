@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ItemDAO {
 	public List<Item> readAll() {
-		String sql = "SELECT id, name, condition, price, description FROM items";
+		String sql = "SELECT id, name, condition, currentPrice, description, auctionType, remainingTime FROM items";
 		List<Item> items = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect();
@@ -18,8 +18,10 @@ public class ItemDAO {
 				item.setId(rs.getInt("id"));
 				item.setName(rs.getString("name"));
 				item.setCondition(rs.getString("condition"));
-				item.setPrice(rs.getFloat("price"));
+				item.setCurrentPrice(rs.getFloat("currentPrice"));
 				item.setDescription(rs.getString("description"));
+				item.setAuctionType(rs.getString("auctionType"));
+				item.setRemainingTime(rs.getString("remainingTime"));
 				items.add(item);
 			}
 		} catch (SQLException e) {
@@ -30,13 +32,15 @@ public class ItemDAO {
 
 	public void create(Item item) {
 
-		String sql = "INSERT INTO items(name, condition, price, description) VALUES(?,?,?,?)";
+		String sql = "INSERT INTO items(name, condition, currentPrice, description, auctionType, remainingTime) VALUES(?,?,?,?,?,?)";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
 			pstmt.setString(2, item.getCondition());
-			pstmt.setFloat(3, item.getPrice());
+			pstmt.setFloat(3, item.getCurrentPrice());
 			pstmt.setString(4, item.getDescription());
+			pstmt.setString(5, item.getAuctionType());
+			pstmt.setString(6, item.getRemainingTime());
 			pstmt.executeUpdate();
 			System.out.println("Added item.");
 		} catch (SQLException e) {
@@ -46,7 +50,7 @@ public class ItemDAO {
 
 	public Item readItem(int id) {
 
-		String sql = "SELECT id, name, condition, price, description FROM items WHERE id = ?";
+		String sql = "SELECT id, name, condition, currentPrice, auctionType, description, remainingTime FROM items WHERE id = ?";
 		Item item = null;
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -58,8 +62,10 @@ public class ItemDAO {
 					item.setId(id);
 					item.setName(rs.getString("name"));
 					item.setCondition(rs.getString("condition"));
-					item.setPrice(rs.getFloat("price"));
+					item.setCurrentPrice(rs.getFloat("currentPrice"));
+					item.setAuctionType(rs.getString("auctionType"));
 					item.setDescription(rs.getString("description"));
+					item.setRemainingTime(rs.getString("remainingTime"));
 				}
 			}
 		} catch (SQLException e) {
@@ -68,9 +74,10 @@ public class ItemDAO {
 		return item;
 	}
 
+	// Search feature
 	public List<Item> readQuery(String query) {
 
-		String sql = "SELECT id, name, condition, price, description FROM items WHERE name LIKE ? OR description LIKE ?";
+		String sql = "SELECT id, name, condition, currentPrice, description, remainingTime FROM items WHERE name LIKE ? OR description LIKE ?";
 		List<Item> items = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -84,8 +91,10 @@ public class ItemDAO {
 					item.setId(rs.getInt("id"));
 					item.setName(rs.getString("name"));
 					item.setCondition(rs.getString("condition"));
-					item.setPrice(rs.getFloat("price"));
+					item.setCurrentPrice(rs.getFloat("currentPrice"));
 					item.setDescription(rs.getString("description"));
+					item.setDescription(rs.getString("description"));
+					item.setRemainingTime(rs.getString("remainingTime"));
 					items.add(item);
 				}
 			} catch (SQLException e) {
@@ -102,14 +111,16 @@ public class ItemDAO {
 
 	public void update(int id, Item item) {
 
-		String sql = "UPDATE items SET name = ?, condition = ?, price = ?, description = ? WHERE id = ?";
+		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ?, auctionType = ?, remainingTime = ? WHERE id = ?";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
 			pstmt.setString(2, item.getCondition());
-			pstmt.setFloat(3, item.getPrice());
+			pstmt.setFloat(3, item.getCurrentPrice());
 			pstmt.setString(4, item.getDescription());
-			pstmt.setInt(5, id);
+			pstmt.setString(5,  item.getAuctionType());
+			pstmt.setString(6, item.getRemainingTime());
+			pstmt.setInt(7, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
