@@ -4,8 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDAO {
-	public List<Item> readAll() {
+public class ItemDAO implements ItemInterface{
+	public List<Item> readAllItems() {
 		String sql = "SELECT id, name, condition, currentPrice, description, auctionType, remainingTime FROM items";
 		List<Item> items = new ArrayList<>();
 
@@ -30,7 +30,7 @@ public class ItemDAO {
 		return items;
 	}
 
-	public void create(Item item) {
+	public void listNewItem(Item item) {
 
 		String sql = "INSERT INTO items(name, condition, currentPrice, description, auctionType, remainingTime) VALUES(?,?,?,?,?,?)";
 
@@ -48,7 +48,7 @@ public class ItemDAO {
 		}
 	}
 
-	public Item readItem(int id) {
+	public Item readItemId(int id) {
 
 		String sql = "SELECT id, name, condition, currentPrice, auctionType, description, remainingTime FROM items WHERE id = ?";
 		Item item = null;
@@ -109,7 +109,7 @@ public class ItemDAO {
 
 	}
 
-	public void update(int id, Item item) {
+	public void updateItem(int id, Item item) {
 
 		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ?, auctionType = ?, remainingTime = ? WHERE id = ?";
 
@@ -127,7 +127,7 @@ public class ItemDAO {
 		}
 	}
 
-	public void delete(int id) {
+	public void deleteItem(int id) {
 		String sql = "DELETE FROM items WHERE id = ?";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

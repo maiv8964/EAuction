@@ -16,13 +16,13 @@ import java.net.URI;
 @Path("/users")
 public class UserController {
 
-	private UserDAO userDAO = new UserDAO();
+	private final UserInterface userDAO = new UserDAO();
 
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public List<User> getAllUsers() {
-//		return userDAO.readAll();
-//	}
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<User> getAllUsers() {
+		return userDAO.readAllUsers();
+	}
 	
 	@POST
 	@Path("/login")
@@ -30,7 +30,7 @@ public class UserController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public User logInUser(@Context HttpServletRequest request, User user) {
 		
-		User loggedInAccount = userDAO.login(user.getUsername(), user.getPassword());
+		User loggedInAccount = userDAO.loginUser(user.getUsername(), user.getPassword());
 		
 		// Authenticate user login
 		if(loggedInAccount != null) {
@@ -46,14 +46,14 @@ public class UserController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User registerUser(User user) {
-		return userDAO.create(user);
+		return userDAO.createUser(user);
 	}
 
 	@GET
 	@Path("/profile/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public User userProfile(@PathParam("id") int id) {
-		return userDAO.read(id);
+		return userDAO.readUserId(id);
 	}
 
 	@PUT
@@ -61,13 +61,13 @@ public class UserController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User updateUserProfile(@PathParam("id") int id, User user) {
-		return userDAO.update(id, user);
+		return userDAO.updateUser(id, user);
 	}
 
 	@DELETE
 	@Path("/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteUser(@PathParam("id") int id) {
-		userDAO.delete(id);
+		userDAO.deleteUser(id);
 	}
 }

@@ -4,8 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAO {
-	public List<User> readAll() {
+public class UserDAO implements UserInterface{
+	public List<User> readAllUsers() {
 		String sql = "SELECT id, username, password, first_name, last_name, address, postal_code, city, country FROM users";
 		List<User> users = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class UserDAO {
 		return users;
 	}
 
-	public User create(User user) {
+	public User createUser(User user) {
 
 		String sql = "INSERT INTO users(username, password, first_name, last_name, address, postal_code, city, country) VALUES(?,?,?,?,?,?,?,?)";
 
@@ -54,7 +54,7 @@ public class UserDAO {
 		return user;
 	}
 
-	public User read(int id) {
+	public User readUserId(int id) {
 
 		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country FROM users WHERE id = ?";
 		User user = null;
@@ -82,7 +82,7 @@ public class UserDAO {
 		return user;
 	}
 
-	public User update(int id, User user) {
+	public User updateUser(int id, User user) {
 
 		String sql = "UPDATE users SET username = ?, password = ?, first_name = ?, last_name = ?, address = ?, postal_code = ?, city = ?, country = ? WHERE id = ?";
 
@@ -104,7 +104,7 @@ public class UserDAO {
 		return user;
 	}
 
-	public void delete(int id) {
+	public void deleteUser(int id) {
 		String sql = "DELETE FROM users WHERE id = ?";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -115,7 +115,7 @@ public class UserDAO {
 		}
 	}
 
-	public User login(String username, String password) {
+	public User loginUser(String username, String password) {
 
 		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country FROM users WHERE username = ? AND password = ?";
 
