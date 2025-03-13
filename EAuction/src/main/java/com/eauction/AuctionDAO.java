@@ -1,10 +1,11 @@
 package com.eauction;
 
 import java.sql.*;
-//import java.util.ArrayList;
-//import java.util.List;
 
-public class AuctionDAO {
+
+public class AuctionDAO implements AuctionInterface{
+	
+    @Override
     public Auction getAuctionById(int auctionId) {
         String sql = "SELECT id, name, currentPrice, description, highestBidderId, shippingPrice, auctionType, auctionStatus FROM items WHERE id = ?";
         Auction auction = null;
@@ -31,54 +32,55 @@ public class AuctionDAO {
         return auction;
     }
     
-public void update(int id, Auction auction) {
-        String selectSql = "SELECT currentPrice, auctionStatus, auctionType FROM items WHERE id = ?";
-        String updateSql = "UPDATE items SET currentPrice = ?, highestBidderId = ?, auctionStatus = ? WHERE id = ?";
-
-        try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(selectSql)) {
-            
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                float currentPrice = rs.getFloat("currentPrice");
-                String auctionStatus = rs.getString("auctionStatus");
-                String auctionType = rs.getString("auctionType");
-
-               if (auctionType.equals("forward")) { //forward auction bidding       	   
-            	   if (auction.getCurrentPrice() > currentPrice && auctionStatus.equals("active")) {
-            		   try (PreparedStatement pstmt2 = conn.prepareStatement(updateSql)) {
-            			   pstmt2.setFloat(1, auction.getCurrentPrice());
-            			   pstmt2.setInt(2, auction.getHighestBidderId());
-            			   pstmt2.setString(3, auctionStatus);
-            			   pstmt2.setInt(4, id);
-            			   pstmt2.executeUpdate();
-            			   System.out.println("Price is updated");
-            		   }
-            	   }
-            	   else {
-            		   System.out.println("Bid must be higher than current price!");
-            	   }
-               }
-               else if (auctionType.equals("dutch")){ //dutch auction bidding
-             	   if (auction.getCurrentPrice() > currentPrice && auctionStatus.equals("active")) {
-            		   try (PreparedStatement pstmt2 = conn.prepareStatement(updateSql)) {
-            			   pstmt2.setFloat(1, auction.getCurrentPrice());
-            			   pstmt2.setInt(2, auction.getHighestBidderId());
-            			   pstmt2.setString(3, "inactive");
-            			   pstmt2.setInt(4, id);
-            			   pstmt2.executeUpdate();
-            			   System.out.println("Bidder wins and auction will be closed");
-            		   }
-            	   }
-            	   else {
-            		   System.out.println("Bid must be higher than current price!");
-            	   }
-            	   
-               }
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+    @Override
+	public void update(int id, Auction auction) {
+	        String selectSql = "SELECT currentPrice, auctionStatus, auctionType FROM items WHERE id = ?";
+	        String updateSql = "UPDATE items SET currentPrice = ?, highestBidderId = ?, auctionStatus = ? WHERE id = ?";
+	
+	        try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(selectSql)) {
+	            
+	            pstmt.setInt(1, id);
+	            ResultSet rs = pstmt.executeQuery();
+	
+	            if (rs.next()) {
+	                float currentPrice = rs.getFloat("currentPrice");
+	                String auctionStatus = rs.getString("auctionStatus");
+	                String auctionType = rs.getString("auctionType");
+	
+	               if (auctionType.equals("forward")) { //forward auction bidding       	   
+	            	   if (auction.getCurrentPrice() > currentPrice && auctionStatus.equals("active")) {
+	            		   try (PreparedStatement pstmt2 = conn.prepareStatement(updateSql)) {
+	            			   pstmt2.setFloat(1, auction.getCurrentPrice());
+	            			   pstmt2.setInt(2, auction.getHighestBidderId());
+	            			   pstmt2.setString(3, auctionStatus);
+	            			   pstmt2.setInt(4, id);
+	            			   pstmt2.executeUpdate();
+	            			   System.out.println("Price is updated");
+	            		   }
+	            	   }
+	            	   else {
+	            		   System.out.println("Bid must be higher than current price!");
+	            	   }
+	               }
+	               else if (auctionType.equals("dutch")){ //dutch auction bidding
+	             	   if (auction.getCurrentPrice() > currentPrice && auctionStatus.equals("active")) {
+	            		   try (PreparedStatement pstmt2 = conn.prepareStatement(updateSql)) {
+	            			   pstmt2.setFloat(1, auction.getCurrentPrice());
+	            			   pstmt2.setInt(2, auction.getHighestBidderId());
+	            			   pstmt2.setString(3, "inactive");
+	            			   pstmt2.setInt(4, id);
+	            			   pstmt2.executeUpdate();
+	            			   System.out.println("Bidder wins and auction will be closed");
+	            		   }
+	            	   }
+	            	   else {
+	            		   System.out.println("Bid must be higher than current price!");
+	            	   }
+	            	   
+	               }
+	            }
+	        } catch (SQLException e) {
+	            System.out.println(e.getMessage());
+	        }
+	    }
 }

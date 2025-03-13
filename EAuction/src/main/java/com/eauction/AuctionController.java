@@ -10,7 +10,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/auction")
 public class AuctionController {
 
-    private AuctionDAO auctionDAO = new AuctionDAO();
+    private final AuctionInterface auctionDAO = new AuctionDAO();
 
     @GET    
     @Path("/{id}")
@@ -25,18 +25,20 @@ public class AuctionController {
     public Response payNowPage(@PathParam("id") int auction_id, @QueryParam("userId") int user_id) {
         Auction auction = auctionDAO.getAuctionById(auction_id);
 
-        if (!auction.getAuctionStatus().equals("inactive")) {
-            return Response.status(Response.Status.NOT_FOUND).entity("{\"error\": \"Auction not yet ended.\"}").build();
-        }
-        if (auction.getHighestBidderId() == user_id) {
-            return Response.ok("{\"message\": \"Payment page loaded.\", " +
-            				   "\"winnerId\": " + auction.getHighestBidderId() + ", " +
-                               "\"auctionId\": " + auction_id + ", " +
-                               "\"finalPrice\": " + auction.getCurrentPrice() + "}").build();
-        } else {
-            return Response.status(Response.Status.FORBIDDEN)
-                    .entity("{\"error\": \"You are not the auction winner.\"}")
-                    .build();
+        if (!auction.getAuctionStatus().equals("active")) {
+            if (auction.getHighestBidderId() == user_id) {
+                return Response.ok("{\"shippingPrice\": " + auction.getShippingPrice() + ", "+
+                				   "\"highestBidder\": " + auction.getHighestBidderId() + ", " +
+                				   "\"description\": " + auction.getDescription() + ", " +
+                                   "\"WinningPrice\": " + auction.getCurrentPrice() 
+                                   + "}").build();
+            } else {
+                return Response.status(Response.Status.FORBIDDEN)
+                        .entity("{\"error\": \"You are not the auction winner\"}")
+                        .build();
+            }
+        } else {        	
+        	return Response.status(Response.Status.NOT_FOUND).entity("{\"error\": \"Auction is still active\"}").build();
         }
     }
     
