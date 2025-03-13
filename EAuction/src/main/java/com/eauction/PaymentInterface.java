@@ -1,6 +1,6 @@
 package com.eauction;
 
 public interface PaymentInterface {
-    void createPayment(Payment payment);
+    boolean processPayment(Payment payment);
     Payment getPayment(int id);
 }
