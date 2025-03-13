@@ -5,8 +5,9 @@ public class Item {
 	private int id;
 	private String name;
 	private String condition;
-	private float price;
+	private float currentPrice;
 	private String description;
+	private String remainingTime;
 	private String auctionType;
 	private Integer sellerId;
 
@@ -35,11 +36,11 @@ public class Item {
 	}
 
 	public float getPrice() {
-		return price;
+		return currentPrice;
 	}
 
 	public void setPrice(float price) {
-		this.price = price;
+		this.currentPrice = price;
 	}
 
 	public String getDescription() {
@@ -64,6 +65,14 @@ public class Item {
 
 	public void setSellerId(Integer sellerId) {
 		this.sellerId = sellerId;
+	}
+
+	public String getRemainingTime() {
+		return remainingTime;
+	}
+
+	public void setRemainingTime(String remainingTime) {
+		this.remainingTime = remainingTime;
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ItemDAO implements ItemInterface{
 	public List<Item> readAllItems() {
-		String sql = "SELECT id, name, condition, currentPrice, description, auctionType, remainingTime FROM items";
+		String sql = "SELECT id, name, condition, currentPrice, description, auctionType, sellerId, remainingTime FROM items";
 
 		List<Item> items = new ArrayList<>();
 
@@ -19,10 +19,11 @@ public class ItemDAO implements ItemInterface{
 				item.setId(rs.getInt("id"));
 				item.setName(rs.getString("name"));
 				item.setCondition(rs.getString("condition"));
-				item.setPrice(rs.getFloat("price"));
+				item.setPrice(rs.getFloat("currentPrice"));
 				item.setDescription(rs.getString("description"));
 				item.setAuctionType(rs.getString("auctionType"));
 				item.setSellerId(rs.getInt("sellerId"));
+				item.setRemainingTime(rs.getString("remainingTime"));
 				items.add(item);
 			}
 		} catch (SQLException e) {
@@ -33,7 +34,7 @@ public class ItemDAO implements ItemInterface{
 
 	public void listNewItem(Item item) {
 
-		String sql = "INSERT INTO items(name, condition, price, description, auctionType, sellerId) VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO items(name, condition, currentPrice, description, auctionType, sellerId) VALUES(?,?,?,?,?,?)";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
@@ -51,7 +52,7 @@ public class ItemDAO implements ItemInterface{
 
 	public Item readItemId(int id) {
 
-		String sql = "SELECT id, name, condition, price, description FROM items WHERE id = ?";
+		String sql = "SELECT id, name, condition, currentPrice, auctionType, remainingTime, sellerId, description FROM items WHERE id = ?";
 		Item item = null;
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -63,10 +64,11 @@ public class ItemDAO implements ItemInterface{
 					item.setId(id);
 					item.setName(rs.getString("name"));
 					item.setCondition(rs.getString("condition"));
-					item.setPrice(rs.getFloat("price"));
+					item.setPrice(rs.getFloat("currentPrice"));
 					item.setDescription(rs.getString("description"));
-					item.setAuctionType(rs.getString("auctionType"));
 					item.setSellerId(rs.getInt("sellerId"));
+					item.setRemainingTime(rs.getString("remainingTime"));
+					item.setAuctionType(rs.getString("auctionType"));
 				}
 			}
 		} catch (SQLException e) {
@@ -77,7 +79,7 @@ public class ItemDAO implements ItemInterface{
 
 	public List<Item> readQuery(String query) {
 
-		String sql = "SELECT id, name, condition, price, description FROM items WHERE name LIKE ? OR description LIKE ?";
+		String sql = "SELECT id, name, condition, currentPrice, description FROM items WHERE name LIKE ? OR description LIKE ?";
 		List<Item> items = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -91,7 +93,7 @@ public class ItemDAO implements ItemInterface{
 					item.setId(rs.getInt("id"));
 					item.setName(rs.getString("name"));
 					item.setCondition(rs.getString("condition"));
-					item.setPrice(rs.getFloat("price"));
+					item.setPrice(rs.getFloat("currentPrice"));
 					item.setDescription(rs.getString("description"));
 					items.add(item);
 				}
@@ -109,7 +111,7 @@ public class ItemDAO implements ItemInterface{
 
 	public void updateItem(int id, Item item) {
 
-		String sql = "UPDATE items SET name = ?, condition = ?, price = ?, description = ? WHERE id = ?"; //Jordi: I'm deliberately going to not allow the update of the auctionType and sellerId
+		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ? WHERE id = ?"; //Jordi: I'm deliberately going to not allow the update of the auctionType and sellerId
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
