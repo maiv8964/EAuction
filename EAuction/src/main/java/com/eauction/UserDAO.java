@@ -85,7 +85,7 @@ public class UserDAO implements UserInterface{
 		return user;
 	}
 
-	public User updateUser(int id, User user) {
+	public void updateUser(int id, User user) {
 
 		String sql = "UPDATE users SET username = ?, password = ?, first_name = ?, last_name = ?, address = ?, postal_code = ?, city = ?, country = ?, province = ? WHERE id = ?";
 
@@ -104,8 +104,6 @@ public class UserDAO implements UserInterface{
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		
-		return user;
 	}
 
 	public void deleteUser(int id) {
