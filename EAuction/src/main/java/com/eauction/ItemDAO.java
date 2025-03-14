@@ -111,7 +111,7 @@ public class ItemDAO implements ItemInterface{
 
 	public void updateItem(int id, Item item) {
 
-		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ? WHERE id = ?"; //Jordi: I'm deliberately going to not allow the update of the auctionType and sellerId
+		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ? WHERE id = ?";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());

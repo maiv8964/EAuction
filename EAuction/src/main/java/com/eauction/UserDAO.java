@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UserDAO implements UserInterface{
 	public List<User> readAllUsers() {
-		String sql = "SELECT id, username, password, first_name, last_name, address, postal_code, city, country FROM users";
+		String sql = "SELECT id, username, password, first_name, last_name, address, postal_code, city, country, province FROM users";
 		List<User> users = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect();
@@ -24,6 +24,7 @@ public class UserDAO implements UserInterface{
 				user.setPostalCode(rs.getString("postal_code"));
 				user.setCity(rs.getString("city"));
 				user.setCountry(rs.getString("country"));
+				user.setProvince(rs.getString("province"));
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -34,7 +35,7 @@ public class UserDAO implements UserInterface{
 
 	public User createUser(User user) {
 
-		String sql = "INSERT INTO users(username, password, first_name, last_name, address, postal_code, city, country) VALUES(?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO users(username, password, first_name, last_name, address, postal_code, city, country, province) VALUES(?,?,?,?,?,?,?,?,?)";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, user.getUsername());
@@ -45,6 +46,7 @@ public class UserDAO implements UserInterface{
 			pstmt.setString(6, user.getPostalCode());
 			pstmt.setString(7, user.getCity());
 			pstmt.setString(8, user.getCountry());
+			pstmt.setString(9, user.getProvince());
 			pstmt.executeUpdate();
 			System.out.println("Added user.");
 		} catch (SQLException e) {
@@ -56,7 +58,7 @@ public class UserDAO implements UserInterface{
 
 	public User readUserId(int id) {
 
-		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country FROM users WHERE id = ?";
+		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country, province FROM users WHERE id = ?";
 		User user = null;
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -74,6 +76,7 @@ public class UserDAO implements UserInterface{
 					user.setPostalCode(rs.getString("postal_code"));
 					user.setCity(rs.getString("city"));
 					user.setCountry(rs.getString("country"));
+					user.setProvince(rs.getString("province"));
 				}
 			}
 		} catch (SQLException e) {
@@ -84,7 +87,7 @@ public class UserDAO implements UserInterface{
 
 	public User updateUser(int id, User user) {
 
-		String sql = "UPDATE users SET username = ?, password = ?, first_name = ?, last_name = ?, address = ?, postal_code = ?, city = ?, country = ? WHERE id = ?";
+		String sql = "UPDATE users SET username = ?, password = ?, first_name = ?, last_name = ?, address = ?, postal_code = ?, city = ?, country = ?, province = ? WHERE id = ?";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, user.getUsername());
@@ -95,7 +98,8 @@ public class UserDAO implements UserInterface{
 			pstmt.setString(6, user.getPostalCode());
 			pstmt.setString(7, user.getCity());
 			pstmt.setString(8, user.getCountry());
-			pstmt.setInt(9, id);
+			pstmt.setString(9, user.getProvince());
+			pstmt.setInt(10, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
