@@ -5,8 +5,8 @@ public class Auction {
     private String name;
     private String auctionType;
     private String auctionStatus;
-    private float currentPrice;
-    private float shippingPrice;
+    private Float currentPrice;
+    private Float shippingPrice;
     private String description;
     private int highestBidderId;
 
@@ -43,7 +43,7 @@ public class Auction {
         this.description = description;
     }
     
-    public float getShippingPrice() {
+    public Float getShippingPrice() {
         return shippingPrice;
     }
 
@@ -59,7 +59,7 @@ public class Auction {
         this.auctionStatus = auctionStatus;
     }
 
-    public float getCurrentPrice() {
+    public Float getCurrentPrice() {
         return currentPrice;
     }
 
