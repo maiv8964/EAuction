@@ -127,7 +127,7 @@ public class ItemDAO implements ItemInterface{
 
 	public void updateItem(int id, Item item) {
 									//
-		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ?, highestBidderId = ?, auctionType = ?, remainingTime = ?, shippingPrice = ?, auctionStatus = ?, sellerId = ?, remainingTime = ? WHERE id = ?";
+		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ?, highestBidderId = ?, auctionType = ?, shippingPrice = ?, auctionStatus = ?, sellerId = ?, remainingTime = ? WHERE id = ?";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
@@ -136,11 +136,11 @@ public class ItemDAO implements ItemInterface{
 			pstmt.setString(4, item.getDescription());
 			pstmt.setInt(5, item.getHighestBidderId());
 			pstmt.setString(6, item.getAuctionType());
-			pstmt.setString(7, item.getRemainingTime());
-			pstmt.setFloat(8, item.getShippingPrice());
-			pstmt.setString(9, item.getAuctionStatus());
-			pstmt.setInt(10, item.getSellerId());
-			pstmt.setInt(5, id);
+			pstmt.setFloat(7, item.getShippingPrice());
+			pstmt.setString(8, item.getAuctionStatus());
+			pstmt.setInt(9, item.getSellerId());
+			pstmt.setString(10, item.getRemainingTime());
+			pstmt.setInt(11, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
