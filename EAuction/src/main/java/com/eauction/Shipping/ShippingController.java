@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Shipping;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;

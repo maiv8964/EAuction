@@ -1,6 +1,8 @@
-package com.eauction;
+package com.eauction.Auction;
 
 import java.sql.*;
+
+import com.eauction.DatabaseConnection;
 
 
 public class AuctionDAO implements AuctionInterface{

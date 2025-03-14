@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Shipping;
 
 public class Shipping {
     private int id;

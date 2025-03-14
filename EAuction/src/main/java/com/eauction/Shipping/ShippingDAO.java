@@ -1,6 +1,8 @@
-package com.eauction;
+package com.eauction.Shipping;
 
 import java.sql.*;
+
+import com.eauction.DatabaseConnection;
 
 public class ShippingDAO implements ShippingInterface {
 

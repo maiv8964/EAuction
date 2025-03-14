@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Payment;
 
 public interface PaymentInterface {
     boolean processPayment(Payment payment);

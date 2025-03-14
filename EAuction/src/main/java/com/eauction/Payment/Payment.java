@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Payment;
 
 public class Payment {
     private int id;

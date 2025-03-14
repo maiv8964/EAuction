@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Auction;
 
 public interface AuctionInterface {
 	Auction getAuctionById(int auctionId);

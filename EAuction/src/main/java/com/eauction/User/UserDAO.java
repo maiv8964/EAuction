@@ -1,8 +1,10 @@
-package com.eauction;
+package com.eauction.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.eauction.DatabaseConnection;
 
 public class UserDAO implements UserInterface{
 	public List<User> readAllUsers() {
