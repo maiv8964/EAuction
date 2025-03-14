@@ -60,8 +60,8 @@ public class UserController {
 	@Path("/profile/update/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User updateUserProfile(@PathParam("id") int id, User user) {
-		return userDAO.updateUser(id, user);
+	public void updateUserProfile(@PathParam("id") int id, User user) {
+		userDAO.updateUser(id, user);
 	}
 
 	@DELETE
