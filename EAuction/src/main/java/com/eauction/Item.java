@@ -8,6 +8,25 @@ public class Item {
 	private float currentPrice;
 	private String description;
 	private String remainingTime;
+	private float shippingPrice;
+
+	public float getShippingPrice() {
+		return shippingPrice;
+	}
+
+	public void setShippingPrice(float shippingPrice) {
+		this.shippingPrice = shippingPrice;
+	}
+
+	public String getAuctionStatus() {
+		return auctionStatus;
+	}
+
+	public void setAuctionStatus(String auctionStatus) {
+		this.auctionStatus = auctionStatus;
+	}
+
+	private String auctionStatus;
 	private String auctionType;
 	private Integer sellerId;
 
@@ -35,11 +54,11 @@ public class Item {
 		this.condition = condition;
 	}
 
-	public float getPrice() {
+	public float getCurrentPrice() {
 		return currentPrice;
 	}
 
-	public void setPrice(float price) {
+	public void setCurrentPrice(float price) {
 		this.currentPrice = price;
 	}
 

@@ -19,7 +19,7 @@ public class ItemDAO implements ItemInterface{
 				item.setId(rs.getInt("id"));
 				item.setName(rs.getString("name"));
 				item.setCondition(rs.getString("condition"));
-				item.setPrice(rs.getFloat("currentPrice"));
+				item.setCurrentPrice(rs.getFloat("currentPrice"));
 				item.setDescription(rs.getString("description"));
 				item.setAuctionType(rs.getString("auctionType"));
 				item.setSellerId(rs.getInt("sellerId"));
@@ -34,15 +34,18 @@ public class ItemDAO implements ItemInterface{
 
 	public void listNewItem(Item item) {
 
-		String sql = "INSERT INTO items(name, condition, currentPrice, description, auctionType, sellerId) VALUES(?,?,?,?,?,?)";
+		String sql = "INSERT INTO items(name, condition, currentPrice, description, remainingTime, shippingPrice, auctionStatus, auctionType, sellerId) VALUES(?,?,?,?,?,?,?,?,?)";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
 			pstmt.setString(2, item.getCondition());
-			pstmt.setFloat(3, item.getPrice());
+			pstmt.setFloat(3, item.getCurrentPrice());
 			pstmt.setString(4, item.getDescription());
-			pstmt.setString(5, item.getAuctionType());
-			pstmt.setInt(6, item.getSellerId());
+			pstmt.setString(5, item.getRemainingTime());
+			pstmt.setFloat(6, item.getShippingPrice());
+			pstmt.setString(7, item.getAuctionStatus());
+			pstmt.setString(8, item.getAuctionType());
+			pstmt.setInt(9, item.getSellerId());
 			pstmt.executeUpdate();
 			System.out.println("Added item.");
 		} catch (SQLException e) {
@@ -64,7 +67,7 @@ public class ItemDAO implements ItemInterface{
 					item.setId(id);
 					item.setName(rs.getString("name"));
 					item.setCondition(rs.getString("condition"));
-					item.setPrice(rs.getFloat("currentPrice"));
+					item.setCurrentPrice(rs.getFloat("currentPrice"));
 					item.setDescription(rs.getString("description"));
 					item.setSellerId(rs.getInt("sellerId"));
 					item.setRemainingTime(rs.getString("remainingTime"));
@@ -93,7 +96,7 @@ public class ItemDAO implements ItemInterface{
 					item.setId(rs.getInt("id"));
 					item.setName(rs.getString("name"));
 					item.setCondition(rs.getString("condition"));
-					item.setPrice(rs.getFloat("currentPrice"));
+					item.setCurrentPrice(rs.getFloat("currentPrice"));
 					item.setDescription(rs.getString("description"));
 					items.add(item);
 				}
@@ -116,7 +119,7 @@ public class ItemDAO implements ItemInterface{
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
 			pstmt.setString(2, item.getCondition());
-			pstmt.setFloat(3, item.getPrice());
+			pstmt.setFloat(3, item.getCurrentPrice());
 			pstmt.setString(4, item.getDescription());
 			pstmt.setInt(5, id);
 			pstmt.executeUpdate();
