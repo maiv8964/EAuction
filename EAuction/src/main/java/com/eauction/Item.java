@@ -7,27 +7,11 @@ public class Item {
 	private String condition;
 	private float currentPrice;
 	private String description;
+	private int highestBidderId;
+	private String auctionType;
 	private String remainingTime;
 	private float shippingPrice;
-
-	public float getShippingPrice() {
-		return shippingPrice;
-	}
-
-	public void setShippingPrice(float shippingPrice) {
-		this.shippingPrice = shippingPrice;
-	}
-
-	public String getAuctionStatus() {
-		return auctionStatus;
-	}
-
-	public void setAuctionStatus(String auctionStatus) {
-		this.auctionStatus = auctionStatus;
-	}
-
 	private String auctionStatus;
-	private String auctionType;
 	private Integer sellerId;
 
 	public int getId() {
@@ -94,4 +78,27 @@ public class Item {
 		this.remainingTime = remainingTime;
 	}
 
+	public int getHighestBidderId() {
+		return highestBidderId;
+	}
+
+	public void setHighestBidderId(int highestBidderId) {
+		this.highestBidderId = highestBidderId;
+	}
+
+	public float getShippingPrice() {
+		return shippingPrice;
+	}
+
+	public void setShippingPrice(float shippingPrice) {
+		this.shippingPrice = shippingPrice;
+	}
+
+	public String getAuctionStatus() {
+		return auctionStatus;
+	}
+
+	public void setAuctionStatus(String auctionStatus) {
+		this.auctionStatus = auctionStatus;
+	}
 }
