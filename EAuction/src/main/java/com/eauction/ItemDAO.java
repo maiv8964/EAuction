@@ -23,6 +23,7 @@ public class ItemDAO implements ItemInterface{
 				item.setDescription(rs.getString("description"));
 				item.setHighestBidderId(rs.getInt("highestBidderId"));
 				item.setAuctionType(rs.getString("auctionType"));
+				item.setAuctionStatus(rs.getString("auctionStatus"));
 				item.setRemainingTime(rs.getString("remainingTime"));
 				item.setShippingPrice(rs.getFloat("shippingPrice"));
 				item.setSellerId(rs.getInt("sellerId"));
@@ -74,6 +75,7 @@ public class ItemDAO implements ItemInterface{
 					item.setDescription(rs.getString("description"));
 					item.setHighestBidderId(rs.getInt("highestBidderId"));
 					item.setAuctionType(rs.getString("auctionType"));
+					item.setAuctionStatus(rs.getString("auctionStatus"));
 					item.setRemainingTime(rs.getString("remainingTime"));
 					item.setShippingPrice(rs.getFloat("shippingPrice"));
 					item.setSellerId(rs.getInt("sellerId"));
@@ -105,6 +107,7 @@ public class ItemDAO implements ItemInterface{
 					item.setDescription(rs.getString("description"));
 					item.setHighestBidderId(rs.getInt("highestBidderId"));
 					item.setAuctionType(rs.getString("auctionType"));
+					item.setAuctionStatus(rs.getString("auctionStatus"));
 					item.setRemainingTime(rs.getString("remainingTime"));
 					item.setShippingPrice(rs.getFloat("shippingPrice"));
 					item.setSellerId(rs.getInt("sellerId"));
