@@ -56,7 +56,7 @@ public class AuctionDAO implements AuctionInterface{
 		            			   pstmt2.setString(3, auctionStatus);
 		            			   pstmt2.setInt(4, id);
 		            			   pstmt2.executeUpdate();
-		            			   System.out.println("Price is updated");
+		            			   System.out.println("Auction price has been set");
 		            		   }
 		            	   }
 		            	   else {
