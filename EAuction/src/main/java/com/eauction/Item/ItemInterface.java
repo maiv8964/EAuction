@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Item;
 
 import java.util.List;
 

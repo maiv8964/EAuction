@@ -1,8 +1,10 @@
-package com.eauction;
+package com.eauction.Item;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.eauction.DatabaseConnection;
 
 public class ItemDAO implements ItemInterface{
 	public List<Item> readAllItems() {

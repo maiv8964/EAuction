@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Receipt;
 
 public interface ReceiptInterface {
     void createReceipt(Receipt receipt);

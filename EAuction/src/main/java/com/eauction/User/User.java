@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.User;
 
 public class User {
 

@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Item;
 
 public class Item {
 

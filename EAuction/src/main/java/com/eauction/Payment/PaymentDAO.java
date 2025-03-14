@@ -1,7 +1,9 @@
-package com.eauction;
+package com.eauction.Payment;
 
 import java.sql.*;
 import java.util.regex.Pattern;
+
+import com.eauction.DatabaseConnection;
 
 public class PaymentDAO implements PaymentInterface {
 

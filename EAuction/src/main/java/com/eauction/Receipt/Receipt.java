@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Receipt;
 
 public class Receipt {
     private int id;

@@ -1,6 +1,8 @@
-package com.eauction;
+package com.eauction.Receipt;
 
 import java.sql.*;
+
+import com.eauction.DatabaseConnection;
 
 public class ReceiptDAO implements ReceiptInterface {
 

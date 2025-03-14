@@ -1,4 +1,4 @@
-package com.eauction;
+package com.eauction.Item;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
