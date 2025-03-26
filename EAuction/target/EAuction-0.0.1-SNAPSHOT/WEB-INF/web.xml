@@ -26,9 +26,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<res-auth>Container</res-auth>
 	</resource-ref>
 	
+	<servlet>
+		<servlet-name>Home</servlet-name>
+		<jsp-file>/ItemList.html</jsp-file>
+	</servlet>
+	
 	<servlet-mapping>
-    	<servlet-name>default</servlet-name>
-    	<url-pattern>/css/*</url-pattern>
+		<servlet-name>Home</servlet-name>
+		<url-pattern></url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -50,15 +55,45 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>ItemList</servlet-name>
 		<url-pattern>/item-list</url-pattern>
 	</servlet-mapping>
-
+	
 	<servlet>
-		<servlet-name>ItemDetail</servlet-name>
-		<jsp-file>/Details.html</jsp-file>
+		<servlet-name>ManageItems</servlet-name>
+		<jsp-file>/ManageItems.html</jsp-file>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>ItemDetail</servlet-name>
-		<url-pattern>/item-detail</url-pattern>
+		<servlet-name>ManageItems</servlet-name>
+		<url-pattern>/manage-items</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ItemDetailForward</servlet-name>
+		<jsp-file>/DetailsForward.html</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ItemDetailForward</servlet-name>
+		<url-pattern>/item-detail-forward</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ItemDetailDutch</servlet-name>
+		<jsp-file>/DetailsDutch.html</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ItemDetailDutch</servlet-name>
+		<url-pattern>/item-detail-dutch</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EditItem</servlet-name>
+		<jsp-file>/EditItem.html</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>EditItem</servlet-name>
+		<url-pattern>/edit-item</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

@@ -78,53 +78,92 @@
 			</tbody>
 		</table>
 	</div>
-	
+
 	<script>
-	$("#SearchItemForm").submit(
-			function(e) {
-				e.preventDefault();
-				var query = $("#query").val();
-				
-				console.log(query);
+		$("#SearchItemForm")
+				.submit(
+						function(e) {
+							e.preventDefault();
+							var query = $("#query").val();
 
-				$.ajax({
-					url : "http://localhost:8080/EAuction/items/search/?q=" + query,
-					type : 'GET',
-					success : function(result) {
-						
-						if(result.length == 0){
-								
-							alert("No search results found.");
-										
-						}else{
-							
-							var table = $("#itemlist").empty();
-											
-							result.forEach(function(item) {
-								var detailsbutton = document.createElement("button");
-								detailsbutton.innerText = "View Details";
-								detailsbutton.classList.add("btn", "btn-success");
+							$
+									.ajax({
+										url : "http://localhost:8080/EAuction/items/search/?q="
+												+ query,
+										type : 'GET',
+										success : function(result) {
 
-								detailsbutton.addEventListener("click", function () {
-									alert("View Details on Item ID: " + item.id);
-								});
+											if (result.length == 0) {
 
-								var row = $("<tr></tr>");
-								row.append($("<td></td>").text(item.name));
-								row.append($("<td></td>").text("$" + item.currentPrice));
-								row.append($("<td></td>").text(item.auctionType));
-								row.append($("<td></td>").text(item.remainingTime));
-								detailsbutton = $("<td></td>").append(detailsbutton);
-								row.append(detailsbutton);
-								table.append(row);
-							});
-						}
-					},
-					error : function(error) {
-						console.log(error);
-					}
-				});
-			});
+												alert("No search results found.");
+
+											} else {
+
+												var table = $("#itemlist")
+														.empty();
+
+												result
+														.forEach(function(item) {
+															var detailsbutton = document
+																	.createElement("button");
+															detailsbutton.innerText = "View Details";
+															detailsbutton.classList
+																	.add("btn",
+																			"btn-success");
+
+															detailsbutton
+																	.addEventListener(
+																			"click",
+																			function() {
+
+																				if (item.auctionType == "Dutch") {
+																					window.location.href = "item-detail-dutch?id="
+																							+ item.id;
+																				}
+
+																				if (item.auctionType == "Forward") {
+																					window.location.href = "item-detail-forward?id="
+																							+ item.id;
+																				}
+																			});
+
+															var row = $("<tr></tr>");
+															row
+																	.append($(
+																			"<td></td>")
+																			.text(
+																					item.name));
+															row
+																	.append($(
+																			"<td></td>")
+																			.text(
+																					"$"
+																							+ item.currentPrice));
+															row
+																	.append($(
+																			"<td></td>")
+																			.text(
+																					item.auctionType));
+															row
+																	.append($(
+																			"<td></td>")
+																			.text(
+																					item.remainingTime));
+															detailsbutton = $(
+																	"<td></td>")
+																	.append(
+																			detailsbutton);
+															row
+																	.append(detailsbutton);
+															table.append(row);
+														});
+											}
+										},
+										error : function(error) {
+											console.log(error);
+										}
+									});
+						});
 	</script>
 
 	<script>
@@ -133,15 +172,23 @@
 				url: "http://localhost:8080/EAuction/items",
 				type: 'GET',
 				success: function (result) {
+					
 					var table = $("#itemlist");
 					result.forEach(function (item) {
-
+	
 						var detailsbutton = document.createElement("button");
 						detailsbutton.innerText = "View Details";
 						detailsbutton.classList.add("btn", "btn-success");
 
 						detailsbutton.addEventListener("click", function () {
-							alert("View Details on Item ID: " + item.id);
+							
+							if(item.auctionType == "Dutch"){
+								window.location.href = "item-detail-dutch?id=" + item.id;
+							}
+							
+							if(item.auctionType == "Forward"){
+								window.location.href = "item-detail-forward?id=" + item.id;
+							}
 						});
 
 						var row = $("<tr></tr>");

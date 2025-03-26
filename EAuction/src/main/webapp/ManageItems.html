@@ -52,13 +52,6 @@
 		</div>
 	</nav>
 
-	<div class="container">
-		<form class="d-flex mt-4" role="search" id="SearchItemForm">
-			<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="query">
-			<button class="btn btn-primary btn-success" type="submit">Search</button>
-		</form>
-	</div>
-
 	<div class="container mx-auto py-5">
 		<table class="table table-striped table-hover text-center" id="itemTable">
 			<thead>
@@ -78,35 +71,71 @@
 			</tbody>
 		</table>
 	</div>
+
+	<div class="modal fade" id="deleteModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Deletion
+						Confirmation</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">Are you sure you want to delete this
+					item?</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary"
+						data-bs-dismiss="modal">Cancel</button>
+					<form id="confirmDelete">
+						<button type="submit" class="btn btn-danger" id="delete">Delete</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	<script>
-	$("#SearchItemForm").submit(
-			function(e) {
-				e.preventDefault();
-				var query = $("#query").val();
-				
-				console.log(query);
-
-				$.ajax({
-					url : "http://localhost:8080/EAuction/items/search/?q=" + query,
-					type : 'GET',
-					success : function(result) {
-						
-						if(result.length == 0){
-								
-							alert("No search results found.");
-										
-						}else{
-							
+		$("#confirmDelete").submit(function(e) {
+			
+			e.preventDefault();
+			
+			var id = document.getElementById("delete").getAttribute("delete-id");
+			
+			$.ajax({
+				url : "http://localhost:8080/EAuction/items/"
+						+ id,
+				type : 'DELETE',
+				success : function(result) {
+					$.ajax({
+						url: "http://localhost:8080/EAuction/items",
+						type: 'GET',
+						success: function (result) {
 							var table = $("#itemlist").empty();
-											
-							result.forEach(function(item) {
-								var detailsbutton = document.createElement("button");
-								detailsbutton.innerText = "View Details";
-								detailsbutton.classList.add("btn", "btn-success");
+							result.forEach(function (item) {
 
-								detailsbutton.addEventListener("click", function () {
-									alert("View Details on Item ID: " + item.id);
+								var editbutton = document.createElement("button");
+								editbutton.innerText = "Edit";
+								editbutton.classList.add("btn", "btn-success", "mx-1");
+
+								editbutton.addEventListener("click", function () {							
+									window.location.href = "edit-item?id=" + item.id;
+								});
+								
+								var deletebutton = document.createElement("button");
+								deletebutton.innerText = "Delete";
+								deletebutton.classList.add("btn", "btn-danger", "mx-1");
+								deletebutton.setAttribute("data-bs-toggle", "modal");
+								deletebutton.setAttribute("data-bs-target", "#deleteModal");
+								deletebutton.addEventListener("click", function () {
+								    document.querySelector(".modal-body").innerText = 
+								        "Are you sure you want to delete: " + item.name + "?";
+								    document.getElementById("delete").setAttribute("delete-id", item.id);
+								});
+
+								deletebutton.addEventListener("click", function () {
+									alert("Delete Item ID: " + item.id);
+									
 								});
 
 								var row = $("<tr></tr>");
@@ -114,17 +143,24 @@
 								row.append($("<td></td>").text("$" + item.currentPrice));
 								row.append($("<td></td>").text(item.auctionType));
 								row.append($("<td></td>").text(item.remainingTime));
-								detailsbutton = $("<td></td>").append(detailsbutton);
-								row.append(detailsbutton);
+								var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
+								row.append(managebuttons);
 								table.append(row);
 							});
+							
+							
+							
+						},
+						error: function (error) {
+							console.log(error);
 						}
-					},
-					error : function(error) {
-						console.log(error);
-					}
-				});
+					});
+				},
+				error : function(error) {
+					console.log(error);
+				}
 			});
+		});
 	</script>
 
 	<script>
@@ -140,16 +176,24 @@
 						editbutton.innerText = "Edit";
 						editbutton.classList.add("btn", "btn-success", "mx-1");
 
-						editbutton.addEventListener("click", function () {
-							alert("View Details on Item ID: " + item.id);
+						editbutton.addEventListener("click", function () {							
+							window.location.href = "edit-item?id=" + item.id;
 						});
 						
 						var deletebutton = document.createElement("button");
 						deletebutton.innerText = "Delete";
 						deletebutton.classList.add("btn", "btn-danger", "mx-1");
+						deletebutton.setAttribute("data-bs-toggle", "modal");
+						deletebutton.setAttribute("data-bs-target", "#deleteModal");
+						deletebutton.addEventListener("click", function () {
+						    document.querySelector(".modal-body").innerText = 
+						        "Are you sure you want to delete: " + item.name + "?";
+						    document.getElementById("delete").setAttribute("delete-id", item.id);
+						});
 
-						editbutton.addEventListener("click", function () {
+						deletebutton.addEventListener("click", function () {
 							alert("Delete Item ID: " + item.id);
+							
 						});
 
 						var row = $("<tr></tr>");
