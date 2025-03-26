@@ -9,7 +9,7 @@ public class Item {
 	private String description;
 	private int highestBidderId;
 	private String auctionType;
-	private String remainingTime;
+	private String startTime;
 	private float shippingPrice;
 	private String auctionStatus;
 	private Integer sellerId;
@@ -70,12 +70,12 @@ public class Item {
 		this.sellerId = sellerId;
 	}
 
-	public String getRemainingTime() {
-		return remainingTime;
+	public String getStartTime() {
+		return startTime;
 	}
 
-	public void setRemainingTime(String remainingTime) {
-		this.remainingTime = remainingTime;
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 
 	public int getHighestBidderId() {

@@ -9,7 +9,6 @@ public class Auction {
     private Float shippingPrice;
     private String description;
     private int highestBidderId;
-	private Date startDate;
 
     public int getItemId() {
         return itemId;
@@ -75,13 +74,5 @@ public class Auction {
     public void setAuctionType(String auction_type) {
         this.auctionType = auction_type;
     }
-
-	public Date getStart() {
-		return startDate;
-	}
-
-	public void setStart(Date startDate) {
-		this.startDate = startDate;
-	}
 
 }
