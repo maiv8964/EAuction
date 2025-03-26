@@ -41,10 +41,11 @@
 					<li class="nav-item"><a class="nav-link" href="manage-items">Manage Listings</a></li>
 				</ul>
 
-				<a class="nav-link mx-1" href="#">Profile</a>
+				<a class="nav-link mx-1" href="edit-profile">Edit Profile</a>
 				<a href="login">
 					<button type="button" class="btn btn-secondary mx-1">Login</button>
 				</a>
+				
 				<a href="login">
 					<button type="button" class="btn btn-danger mx-1">Logout</button>
 				</a>
@@ -71,36 +72,59 @@
 			</tbody>
 		</table>
 	</div>
+	
 
-	<div class="modal fade" id="deleteModal" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">Deletion
-						Confirmation</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">Are you sure you want to delete this
-					item?</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
-						data-bs-dismiss="modal">Cancel</button>
-					<form id="confirmDelete">
-						<button type="submit" class="btn btn-danger" id="delete">Delete</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+	<script>
+		$(document).ready(function () {
+			$.ajax({
+				url: "http://localhost:8080/EAuction/items",
+				type: 'GET',
+				success: function (result) {
+					var table = $("#itemlist");
+					result.forEach(function (item) {
+
+						var editbutton = document.createElement("button");
+						editbutton.innerText = "Edit";
+						editbutton.classList.add("btn", "btn-success", "mx-1");
+
+						editbutton.addEventListener("click", function () {							
+							window.location.href = "edit-item?id=" + item.id;
+						});
+						
+						var deletebutton = document.createElement("button");
+						deletebutton.innerText = "Delete";
+						deletebutton.classList.add("btn", "btn-danger", "mx-1");
+						deletebutton.addEventListener("click", function () {
+							
+							let result = confirm("Delete Item ID: " + item.id + "?");
+				            if (result === true) {
+				                console.log("User clicked OK");
+				                deleteItem(item.id);
+				            } else {
+				                console.log("User clicked Cancel");
+				            }
+						});
+
+						var row = $("<tr></tr>");
+						row.append($("<td></td>").text(item.name));
+						row.append($("<td></td>").text("$" + item.currentPrice));
+						row.append($("<td></td>").text(item.auctionType));
+						row.append($("<td></td>").text(item.remainingTime));
+						var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
+						row.append(managebuttons);
+						table.append(row);
+					});
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+		});
+	</script>
 	
 	<script>
-		$("#confirmDelete").submit(function(e) {
-			
-			e.preventDefault();
-			
-			var id = document.getElementById("delete").getAttribute("delete-id");
+	
+		function deleteItem(id){
 			
 			$.ajax({
 				url : "http://localhost:8080/EAuction/items/"
@@ -125,17 +149,14 @@
 								var deletebutton = document.createElement("button");
 								deletebutton.innerText = "Delete";
 								deletebutton.classList.add("btn", "btn-danger", "mx-1");
-								deletebutton.setAttribute("data-bs-toggle", "modal");
-								deletebutton.setAttribute("data-bs-target", "#deleteModal");
 								deletebutton.addEventListener("click", function () {
-								    document.querySelector(".modal-body").innerText = 
-								        "Are you sure you want to delete: " + item.name + "?";
-								    document.getElementById("delete").setAttribute("delete-id", item.id);
-								});
-
-								deletebutton.addEventListener("click", function () {
-									alert("Delete Item ID: " + item.id);
 									
+									let result = confirm("Delete Item ID: " + item.id + "?");
+						            if (result === true) {
+						                deleteItem(item.id);
+						            } else {
+						                console.log("User cancelled deleting item.");
+						            }
 								});
 
 								var row = $("<tr></tr>");
@@ -147,9 +168,6 @@
 								row.append(managebuttons);
 								table.append(row);
 							});
-							
-							
-							
 						},
 						error: function (error) {
 							console.log(error);
@@ -159,58 +177,8 @@
 				error : function(error) {
 					console.log(error);
 				}
-			});
-		});
-	</script>
-
-	<script>
-		$(document).ready(function () {
-			$.ajax({
-				url: "http://localhost:8080/EAuction/items",
-				type: 'GET',
-				success: function (result) {
-					var table = $("#itemlist");
-					result.forEach(function (item) {
-
-						var editbutton = document.createElement("button");
-						editbutton.innerText = "Edit";
-						editbutton.classList.add("btn", "btn-success", "mx-1");
-
-						editbutton.addEventListener("click", function () {							
-							window.location.href = "edit-item?id=" + item.id;
-						});
-						
-						var deletebutton = document.createElement("button");
-						deletebutton.innerText = "Delete";
-						deletebutton.classList.add("btn", "btn-danger", "mx-1");
-						deletebutton.setAttribute("data-bs-toggle", "modal");
-						deletebutton.setAttribute("data-bs-target", "#deleteModal");
-						deletebutton.addEventListener("click", function () {
-						    document.querySelector(".modal-body").innerText = 
-						        "Are you sure you want to delete: " + item.name + "?";
-						    document.getElementById("delete").setAttribute("delete-id", item.id);
-						});
-
-						deletebutton.addEventListener("click", function () {
-							alert("Delete Item ID: " + item.id);
-							
-						});
-
-						var row = $("<tr></tr>");
-						row.append($("<td></td>").text(item.name));
-						row.append($("<td></td>").text("$" + item.currentPrice));
-						row.append($("<td></td>").text(item.auctionType));
-						row.append($("<td></td>").text(item.remainingTime));
-						var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
-						row.append(managebuttons);
-						table.append(row);
-					});
-				},
-				error: function (error) {
-					console.log(error);
-				}
-			});
-		});
+			});	
+		}
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

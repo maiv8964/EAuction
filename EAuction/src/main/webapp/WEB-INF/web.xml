@@ -116,4 +116,24 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<url-pattern>/add-item</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>EditProfile</servlet-name>
+		<jsp-file>/EditProfile.html</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>EditProfile</servlet-name>
+		<url-pattern>/edit-profile</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Checkout</servlet-name>
+		<jsp-file>/Checkout.html</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Checkout</servlet-name>
+		<url-pattern>/checkout</url-pattern>
+	</servlet-mapping>
+	
 </web-app>
