@@ -8,7 +8,7 @@ import com.eauction.DatabaseConnection;
 
 public class ItemDAO implements ItemInterface{
 	public List<Item> readAllItems() {
-		String sql = "SELECT id, name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId, startTime FROM items";
+		String sql = "SELECT id, name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId, finishTime FROM items";
 
 		List<Item> items = new ArrayList<>();
 
@@ -29,6 +29,7 @@ public class ItemDAO implements ItemInterface{
 				item.setStartTime(rs.getString("startTime"));
 				item.setShippingPrice(rs.getFloat("shippingPrice"));
 				item.setSellerId(rs.getInt("sellerId"));
+				item.setFinishTime(rs.getString("finishTime"));
 				items.add(item);
 			}
 		} catch (SQLException e) {
@@ -39,7 +40,7 @@ public class ItemDAO implements ItemInterface{
 
 	public void listNewItem(Item item) {
 
-		String sql = "INSERT INTO items(name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId) VALUES(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO items(name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId, finishTime) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
@@ -52,6 +53,7 @@ public class ItemDAO implements ItemInterface{
 			pstmt.setFloat(8, item.getShippingPrice());
 			pstmt.setString(9, item.getAuctionStatus());
 			pstmt.setInt(10, item.getSellerId());
+			pstmt.setString(11, item.getFinishTime());
 			pstmt.executeUpdate();
 			System.out.println("Added item.");
 		} catch (SQLException e) {
@@ -61,7 +63,7 @@ public class ItemDAO implements ItemInterface{
 
 	public Item readItemId(int id) {
 
-		String sql = "SELECT id, name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId, startTime FROM items WHERE id = ?";
+		String sql = "SELECT id, name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId, finishTime FROM items WHERE id = ?";
 		Item item = null;
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -81,6 +83,7 @@ public class ItemDAO implements ItemInterface{
 					item.setStartTime(rs.getString("startTime"));
 					item.setShippingPrice(rs.getFloat("shippingPrice"));
 					item.setSellerId(rs.getInt("sellerId"));
+					item.setFinishTime(rs.getString("finishTime"));
 				}
 			}
 		} catch (SQLException e) {
@@ -91,7 +94,7 @@ public class ItemDAO implements ItemInterface{
 
 	public List<Item> readQuery(String query) {
 
-		String sql = "SELECT id, id, name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId, startTime FROM items WHERE name LIKE ? OR description LIKE ?";
+		String sql = "SELECT id, id, name, condition, currentPrice, description, highestBidderId, auctionType, startTime, shippingPrice, auctionStatus, sellerId, finishTime FROM items WHERE name LIKE ? OR description LIKE ?";
 		List<Item> items = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -113,6 +116,7 @@ public class ItemDAO implements ItemInterface{
 					item.setStartTime(rs.getString("startTime"));
 					item.setShippingPrice(rs.getFloat("shippingPrice"));
 					item.setSellerId(rs.getInt("sellerId"));
+					item.setFinishTime(rs.getString("finishTime"));
 					items.add(item);
 				}
 			} catch (SQLException e) {
@@ -129,7 +133,7 @@ public class ItemDAO implements ItemInterface{
 
 	public void updateItem(int id, Item item) {
 									//
-		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ?, highestBidderId = ?, auctionType = ?, shippingPrice = ?, auctionStatus = ?, sellerId = ?, startTime = ? WHERE id = ?";
+		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ?, highestBidderId = ?, auctionType = ?, shippingPrice = ?, auctionStatus = ?, sellerId = ?, startTime = ?, finishTime = ?, WHERE id = ?";
 
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, item.getName());
@@ -142,7 +146,8 @@ public class ItemDAO implements ItemInterface{
 			pstmt.setString(8, item.getAuctionStatus());
 			pstmt.setInt(9, item.getSellerId());
 			pstmt.setString(10, item.getStartTime());
-			pstmt.setInt(11, id);
+			pstmt.setString(11, item.getFinishTime());
+			pstmt.setInt(12, id);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());

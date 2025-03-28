@@ -1,4 +1,6 @@
 package com.eauction.Item;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Item {
 
@@ -13,6 +15,7 @@ public class Item {
 	private float shippingPrice;
 	private String auctionStatus;
 	private Integer sellerId;
+	private String finishTime;
 
 	public int getId() {
 		return id;
@@ -101,4 +104,27 @@ public class Item {
 	public void setAuctionStatus(String auctionStatus) {
 		this.auctionStatus = auctionStatus;
 	}
+	
+	public String getFinishTime() {
+		return finishTime;
+	}
+
+	public void setFinishTime(String finishTime) {
+		this.finishTime = finishTime;
+	}
+	
+	public String calculateRemainingTime() {
+		String output = "";
+		
+		LocalDateTime end = LocalDateTime.parse(this.finishTime);
+		
+		LocalDateTime now = LocalDateTime.now();
+		
+		Duration diff = Duration.between(now, end);
+		
+		output = diff.toString();
+		
+		return output;
+	}
+	
 }
