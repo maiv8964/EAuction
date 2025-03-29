@@ -35,6 +35,7 @@ public class UserController {
 		// Authenticate user login
 		if(loggedInAccount != null) {
 			System.out.println("Successful Login");
+			System.out.print(user.getId());
 			return loggedInAccount;
 		};
 		System.out.println("Invalid Login");
