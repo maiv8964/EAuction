@@ -28,29 +28,29 @@
 <body>
 
     <nav class="navbar bg-primary navbar-expand-lg" data-bs-theme="dark">
-		<div class="container-fluid">
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
-				aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-				<a class="navbar-brand" href="item-list">EAuction</a>
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="item-list">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="add-item">Post a Listing</a></li>
-					<li class="nav-item"><a class="nav-link" href="manage-items">Manage Listings</a></li>
-				</ul>
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <a class="navbar-brand" href="item-list">EAuction</a>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="item-list">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="add-item">Post a Listing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="manage-items">Manage Listings</a></li>
+                </ul>
 
-				<a class="nav-link mx-1" href="edit-profile">Edit Profile</a>
-				<a href="login">
-					<button type="button" class="btn btn-secondary mx-1">Login</button>
-				</a>
-				<a href="login">
-					<button type="button" class="btn btn-danger mx-1">Logout</button>
-				</a>
-			</div>
-		</div>
-	</nav>
+                <a class="nav-link mx-1" href="edit-profile">Edit Profile</a>
+                <a href="login">
+                    <button type="button" class="btn btn-secondary mx-1">Login</button>
+                </a>
+                <a href="login">
+                    <button type="button" class="btn btn-danger mx-1">Logout</button>
+                </a>
+            </div>
+        </div>
+    </nav>
 
     <div class="container">
         <form class="d-flex mt-4" role="search">
@@ -88,33 +88,39 @@
         </div>
     </div>
 
-	<script>
-	    const urlParams = new URLSearchParams(window.location.search);
-	    const itemId = urlParams.get("id");
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get("id");
         var endDate;
-	    
-	    $(document).ready(function () {
-			$.ajax({
-				url: "http://localhost:8080/EAuction/items/" + itemId,
-				type: 'GET',
-				success: function (result) {
-					document.getElementById("item-name").textContent = result.name;
-					document.getElementById("condition").textContent = "Condition: " + result.condition;
-					document.getElementById("description").textContent = result.description;
-					document.getElementById("currentPrice").textContent = "Current Price: $" + result.currentPrice;
-					document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + result.highestBidderId;
-                    endDate = new Date("2025-12-17T03:24:00");
-				},
-				error: function (error) {
-					console.log(error);
-				}
-			});
-		});
 
-        var temp = setInterval(function() {
+        $(document).ready(function () {
+            $.ajax({
+                url: "http://localhost:8080/EAuction/items/" + itemId,
+                type: 'GET',
+                success: function (result) {
+                    document.getElementById("item-name").textContent = result.name;
+                    document.getElementById("condition").textContent = "Condition: " + result.condition;
+                    document.getElementById("description").textContent = result.description;
+                    document.getElementById("currentPrice").textContent = "Current Price: $" + result.currentPrice;
+                    document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + result.highestBidderId;
+                    endDate = new Date("2025-12-17T03:24:00");
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        var temp = setInterval(function () {
             var now = new Date().getTime();
             var countdown = endDate - now;
-            document.getElementById("countdown").textContent = countdown;
+
+            var days = Math.floor(countdown / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").textContent = days + " Days " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds ";
         }, 1000);
     </script>
 
