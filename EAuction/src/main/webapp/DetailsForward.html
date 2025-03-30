@@ -82,7 +82,7 @@
             <div class="d-flex py-4 text-center justify-content-center">
                 <form id="bidForm">
                     <input type="number" class="form-control" required>
-                    <button class="btn btn-success my-4">Bifd!</button>
+                    <button class="btn btn-success my-4">Bid!</button>
                 </form>
             </div>
         </div>
@@ -91,6 +91,7 @@
 	<script>
 	    const urlParams = new URLSearchParams(window.location.search);
 	    const itemId = urlParams.get("id");
+        var endDate;
 	    
 	    $(document).ready(function () {
 			$.ajax({
@@ -102,7 +103,7 @@
 					document.getElementById("description").textContent = result.description;
 					document.getElementById("currentPrice").textContent = "Current Price: $" + result.currentPrice;
 					document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + result.highestBidderId;
-                    var endDate = new Date("2025-12-17T03:24:00");
+                    endDate = new Date("2025-12-17T03:24:00");
 				},
 				error: function (error) {
 					console.log(error);
@@ -112,7 +113,8 @@
 
         var temp = setInterval(function() {
             var now = new Date().getTime();
-            document.getElementById("countdown").textContent = now;
+            var countdown = endDate - now;
+            document.getElementById("countdown").textContent = countdown;
         }, 1000);
     </script>
 
