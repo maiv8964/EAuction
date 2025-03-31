@@ -137,7 +137,7 @@
 								
 								existingSellerId = result.sellerId;
 								status = result.auctionStatus;
-								timeLeft = result.remainingTime;
+								timeLeft = result.finishTime;
 								
 								var itemData = {
 										name : $("#itemName").val(),
@@ -148,10 +148,13 @@
 										auctionType: $("#auctionType").val(),
 										sellerId: existingSellerId,
 										auctionStatus: status,
-										remainingTime: timeLeft
+										finishTime: timeLeft
 									};
 									
 								// Update Item
+								
+								
+								//Use this with the countdown to update the auction status of the item.
 								$.ajax({
 									url : "http://localhost:8080/EAuction/items/" + itemId,
 									type : 'PUT',
@@ -190,7 +193,7 @@
 	                $("#shippingPrice").val(result.shippingPrice);
 	                $("#auctionType").val(result.auctionType);
 	                
-	                let timeString = result.remainingTime;
+	                let timeString = result.finishTime;
 	                let originalTime = parseInt(timeString.substring(0, 2), 10);
 	                
 	                $("#duration").val(originalTime);

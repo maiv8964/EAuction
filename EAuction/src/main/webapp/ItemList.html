@@ -46,8 +46,14 @@
 					<button type="button" class="btn btn-secondary mx-1">Login</button>
 				</a>
 				<a href="login">
-					<button type="button" class="btn btn-danger mx-1">Logout</button>
+					<button type="button" class="btn btn-danger mx-1" onclick="logout()">Logout</button>
 				</a>
+
+				<script>
+					function logout() {
+						sessionStorage.setItem("UserID", -1);
+					}
+				</script>
 			</div>
 		</div>
 	</nav>
@@ -66,7 +72,7 @@
 					<th>Item Name</th>
 					<th>Current Price</th>
 					<th>Auction Type</th>
-					<th>Remaining Time</th>
+					<th>Finish Time</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -148,7 +154,7 @@
 																	.append($(
 																			"<td></td>")
 																			.text(
-																					item.remainingTime));
+																					item.finishTime));
 															detailsbutton = $(
 																	"<td></td>")
 																	.append(
@@ -195,7 +201,7 @@
 						row.append($("<td></td>").text(item.name));
 						row.append($("<td></td>").text("$" + item.currentPrice));
 						row.append($("<td></td>").text(item.auctionType));
-						row.append($("<td></td>").text(item.remainingTime));
+						row.append($("<td></td>").text(item.finishTime));
 						detailsbutton = $("<td></td>").append(detailsbutton);
 						row.append(detailsbutton);
 						table.append(row);
