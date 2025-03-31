@@ -123,7 +123,7 @@
 
             
 
-            if (isNaN(countdown)) {
+            if (isNaN(countdown) || countdown < 0) {
                 document.getElementById("countdown").textContent = "0 Days " + "0 Hours " + "0 Minutes " + "0 Seconds ";
                 $.ajax({
                     url: "http://localhost:8080/EAuction/items/" + itemId,
