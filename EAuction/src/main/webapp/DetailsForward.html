@@ -131,11 +131,11 @@
                     success: function (result) {
 
                         existingSellerId = result.sellerId; //Delete?
-                        status = "inactive";
+                        const status = "inactive";
                         timeLeft = result.finishTime; //Delete?
 
                         var itemData = {
-                            name: "sanity check",
+                            name: "sanity check", //For debugging, switch back afterwards
                             condition: result.condition,
                             description: result.description,
                             currentPrice: result.currentPrice,
@@ -156,6 +156,7 @@
                             contentType: 'application/json',
                             data: JSON.stringify(itemData),
                             success: function (result) {
+                                console.log(itemData); //For debugging
                                 alert("Updated sucessfully.");
                                 // window.location.href = "item-list";
                             },
