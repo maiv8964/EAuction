@@ -52,6 +52,8 @@
 				<script>
 					function logout() {
 						sessionStorage.setItem("UserID", -1);
+						sessionStorage.setItem("loginStatus", "False");
+						window.location.href = "login";
 					}
 				</script>
 			</div>
@@ -173,6 +175,7 @@
 	</script>
 
 	<script>
+		if(sessionStorage.getItem("loginStatus") == "True"){
 		$(document).ready(function () {
 			$.ajax({
 				url: "http://localhost:8080/EAuction/items",
@@ -212,6 +215,10 @@
 				}
 			});
 		});
+		}
+		else {
+			window.location.href = "login";
+		}
 	</script>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
