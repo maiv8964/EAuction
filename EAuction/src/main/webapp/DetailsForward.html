@@ -103,7 +103,7 @@
                     document.getElementById("description").textContent = result.description;
                     document.getElementById("currentPrice").textContent = "Current Price: $" + result.currentPrice;
                     document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + result.highestBidderId;
-                    endDate = new Date("2025-12-17T03:24:00");
+                    endDate = new Date(result.finishTime);
                 },
                 error: function (error) {
                     console.log(error);
@@ -114,15 +114,17 @@
         var temp = setInterval(function () {
             var now = new Date().getTime();
             var countdown = endDate - now;
+            console.log(countdown);
 
             var days = Math.floor(countdown / (1000 * 60 * 60 * 24));
             var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
 
-            document.getElementById("countdown").textContent = days + " Days " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds ";
+            
 
-            if (countdown < 0) {
+            if (isNaN(countdown)) {
+                document.getElementById("countdown").textContent = "0 Days " + "0 Hours " + "0 Minutes " + "0 Seconds ";
                 $.ajax({
                     url: "http://localhost:8080/EAuction/items/" + itemId,
                     type: 'GET',
@@ -133,7 +135,7 @@
                         timeLeft = result.finishTime; //Delete?
 
                         var itemData = {
-                            name: result.name,
+                            name: "sanity check",
                             condition: result.condition,
                             description: result.description,
                             currentPrice: result.currentPrice,
@@ -166,6 +168,9 @@
                         console.log(error);
                     }
                 });
+            }
+            else {
+                document.getElementById("countdown").textContent = days + " Days " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds ";
             }
         }, 1000);
     </script>
