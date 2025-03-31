@@ -143,8 +143,6 @@ public class UserDAO implements UserInterface{
 					user.setCity(rs.getString("city"));
 					user.setCountry(rs.getString("country"));
 					user.setId(rs.getInt("id"));
-					System.out.println(rs.getInt("id"));
-
 				}
 			}
 		} catch (SQLException e) {

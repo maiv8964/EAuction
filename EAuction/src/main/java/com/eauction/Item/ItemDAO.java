@@ -32,7 +32,6 @@ public class ItemDAO implements ItemInterface{
 				items.add(item);
 			}
 		} catch (SQLException e) {
-			System.out.println("gong");
 			System.out.println(e.getMessage());
 		}
 		return items;
@@ -58,7 +57,6 @@ public class ItemDAO implements ItemInterface{
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		System.out.println(item);
 		return item;
 	}
 
