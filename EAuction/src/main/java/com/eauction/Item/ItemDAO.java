@@ -58,7 +58,7 @@ public class ItemDAO implements ItemInterface{
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		
+		System.out.println(item);
 		return item;
 	}
 
@@ -130,7 +130,7 @@ public class ItemDAO implements ItemInterface{
 
 	}
 
-	public void updateItem(int id, Item item) {
+	public Item updateItem(int id, Item item) {
 									//
 		String sql = "UPDATE items SET name = ?, condition = ?, currentPrice = ?, description = ?, highestBidderId = ?, auctionType = ?, shippingPrice = ?, auctionStatus = ?, sellerId = ?, finishTime = ? WHERE id = ?";
 
@@ -150,6 +150,8 @@ public class ItemDAO implements ItemInterface{
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+		
+		return item;
 	}
 
 	public void deleteItem(int id) {
