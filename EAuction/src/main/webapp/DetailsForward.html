@@ -87,6 +87,15 @@
             </div>
         </div>
     </div>
+    
+    <script>
+    	$(document).ready(function () {
+    		if(sessionStorage.getItem("loginStatus") == "False"){
+    			window.location.href = "login";
+    		}
+    		
+    	});
+    </script>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -102,26 +111,86 @@
                     document.getElementById("condition").textContent = "Condition: " + result.condition;
                     document.getElementById("description").textContent = result.description;
                     document.getElementById("currentPrice").textContent = "Current Price: $" + result.currentPrice;
-                    document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + result.highestBidderId;
+                    
+                    var highestId;
+                    if(result.highestBidderId == 0){
+						 highestId = "None";
+                    }else{
+                    	highestId = result.highestBidderId;
+                    }
+                    
+                    document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + highestId;
+                    
                     endDate = new Date(result.finishTime);
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
-        });
-
-        var temp = setInterval(function () {
-            var now = new Date().getTime();
-            var countdown = endDate - now;
-            console.log(countdown);
-
-            var days = Math.floor(countdown / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
-
             
+            var temp = setInterval(function () {
+                var now = new Date().getTime();
+                var countdown = endDate - now;
+                console.log(countdown);
+
+                var days = Math.floor(countdown / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
+
+                
+
+                if (isNaN(countdown)) {
+                    document.getElementById("countdown").textContent = "0 Days " + "0 Hours " + "0 Minutes " + "0 Seconds ";
+                    $.ajax({
+                        url: "http://localhost:8080/EAuction/items/" + itemId,
+                        type: 'GET',
+                        success: function (result) {
+
+                            existingSellerId = result.sellerId; //Delete?
+                            status = "inactive";
+                            timeLeft = result.finishTime; //Delete?
+
+                            var itemData = {
+                                name: "sanity check",
+                                condition: result.condition,
+                                description: result.description,
+                                currentPrice: result.currentPrice,
+                                shippingPrice: result.shippingPrice,
+                                auctionType: result.auctionType,
+                                sellerId: result.sellerId,
+                                auctionStatus: status,
+                                finishTime: result.finishTime
+                            };
+
+                            // Update Item
+
+
+                            //Use this with the countdown to update the auction status of the item.
+                            $.ajax({
+                                url: "http://localhost:8080/EAuction/items/" + itemId,
+                                type: 'PUT',
+                                contentType: 'application/json',
+                                data: JSON.stringify(itemData),
+                                success: function (result) {
+                                    alert("Updated sucessfully.");
+                                    // window.location.href = "item-list";
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+                else {
+                    document.getElementById("countdown").textContent = days + " Days " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds ";
+                }
+            }, 1000);
+        });
 
             if (isNaN(countdown) || countdown < 0) {
                 document.getElementById("countdown").textContent = "0 Days " + "0 Hours " + "0 Minutes " + "0 Seconds ";

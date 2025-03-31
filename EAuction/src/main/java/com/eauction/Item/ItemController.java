@@ -22,8 +22,8 @@ public class ItemController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void listItem(Item item) {
-		itemDAO.listNewItem(item);
+	public Item listItem(Item item) {
+		return itemDAO.listNewItem(item);
 	}
 
 	@GET
@@ -44,8 +44,8 @@ public class ItemController {
 	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void updateItem(@PathParam("id") int id, Item item) {
-		itemDAO.updateItem(id, item);
+	public Item updateItem(@PathParam("id") int id, Item item) {
+		return itemDAO.updateItem(id, item);
 	}
 
 	@DELETE

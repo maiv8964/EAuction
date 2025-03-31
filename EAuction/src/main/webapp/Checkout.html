@@ -111,6 +111,15 @@
 		</a>
 
 	</div>
+	
+	<script>
+    	$(document).ready(function () {
+    		if(sessionStorage.getItem("loginStatus") == "False"){
+    			window.location.href = "login";
+    		}
+    		
+    	});
+    </script>
 
 	<script>
 		var urlParams = new URLSearchParams(window.location.search);
