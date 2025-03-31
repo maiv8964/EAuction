@@ -84,6 +84,15 @@
     </div>
     
     <script>
+    	$(document).ready(function () {
+    		if(sessionStorage.getItem("loginStatus") == "False"){
+    			window.location.href = "login";
+    		}
+    		
+    	});
+    </script>
+    
+    <script>
 	    const urlParams = new URLSearchParams(window.location.search);
 	    const itemId = urlParams.get("id");
 	    

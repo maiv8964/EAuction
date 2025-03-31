@@ -32,12 +32,13 @@ public class ItemDAO implements ItemInterface{
 				items.add(item);
 			}
 		} catch (SQLException e) {
+			System.out.println("gong");
 			System.out.println(e.getMessage());
 		}
 		return items;
 	}
 
-	public void listNewItem(Item item) {
+	public Item listNewItem(Item item) {
 
 		String sql = "INSERT INTO items(name, condition, currentPrice, description, highestBidderId, auctionType, finishTime, shippingPrice, auctionStatus, sellerId) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
@@ -57,6 +58,8 @@ public class ItemDAO implements ItemInterface{
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
+		
+		return item;
 	}
 
 	public Item readItemId(int id) {
