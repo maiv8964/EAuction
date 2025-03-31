@@ -63,59 +63,69 @@
 
 	<div class="container text-center">
 
-		<form id="EditItemForm">
+		<form id="editItemForm">
 
-			<div class="row align-items-start post">
-				<div class="col">
-					<label for="itemName" class="form-label">Item Name</label> <input
-						type="text" class="form-control" id="itemName"
-						placeholder="i.e. iPhone 13" required> <label
-						for="condition" class="form-label">Condition</label> <select
-						class="form-control" id="condition" name="condition" required>
-						<option value="New">New</option>
-						<option value="Refurbished">Refurbished</option>
-						<option value="Good">Good</option>
-						<option value="Defect">Has Defects</option>
-						<option value="Unknown">Unknown Working Condition</option>
-					</select> <label for="price" class="form-label">Price ($)</label> <input
-						type="text" class="form-control" id="price"
-						placeholder="i.e. 180.00" required> <label
-						for="shippingPrice" class="form-label">Shipping Price ($)</label>
-					<input type="text" class="form-control" id="shippingPrice"
-						placeholder="i.e. 5.00" required>
+            <div class="row align-items-start post">
+                <div class="col">
+                    <label for="itemName" class="form-label">Item Name</label>
+                    <input type="text" class="form-control" id="itemName" placeholder="i.e. iPhone 13" required>
+
+                    <label for="condition" class="form-label">Condition</label>
+                    <select class="form-control" id="condition" name="condition">
+                        <option value="New" selected>New</option>
+                        <option value="Like New">Like New</option>
+                        <option value="Good">Good</option>
+                        <option value="Defect">Has Defects</option>
+                        <option value="Unknown">Unknown Working Condition</option>
+                    </select>
+
+                    <label for="price" class="form-label">Price ($)</label>
+                    <input type="number" class="form-control" id="price" placeholder="i.e. 180.00" required>
+
+                    <label for="shippingPrice" class="form-label">Shipping Price ($)</label>
+                    <input type="number" class="form-control" id="shippingPrice" placeholder="i.e. 5.00" required>
+                </div>
+                
+                <div class="col mb-3">
+
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" name="description" id="description" rows="5"
+                        placeholder="i.e. Brand new phone with no issues..." required></textarea>
+
+                    <label for="auctionType" class="form-label">Auction Type</label>
+                    <select class="form-control" id="auctionType" name="auctionType">
+                        <option value="forward" selected>Forward</option>
+                        <option value="dutch">Dutch</option>
+                    </select>
+
+                    <label class="form-label" for="finish">Auction Finish Time</label>
+	                <input class="form-control" id="finish" type="datetime-local" name="finish" disabled/>
+
 				</div>
-
-				<div class="col mb-3">
-
-					<label for="description" class="form-label">Description</label>
-					<textarea class="form-control" name="description" id="description"
-						rows="5" placeholder="i.e. Brand new phone with no issues..."
-						required></textarea>
-
-					<label for="auctionType" class="form-label">Auction Type</label> <select
-						class="form-control" id="auctionType" name="auctionType">
-						<option value="Forward">Forward</option>
-						<option value="Dutch">Dutch</option>
-					</select> <label for="duration" class="form-label">Auction Time
-						Duration (hours)</label> <input type="number" class="form-control"
-						id="duration" name="duration" min="1" placeholder="i.e. 3"
-						disabled>
-
-				</div>
+            </div>
+            
+            <p class="badge text-bg-danger form-control my-2" id="confirmationMessage"></p>
+            
+            <div class="d-flex justify-content-center w-100">
+				<button type="submit" class="btn btn-primary my-2">Post Listing</button>
 			</div>
 
-			<div class="d-flex justify-content-center w-100">
-				<button type="submit" class="btn btn-primary my-2">Update
-					Listing</button>
-			</div>
-
-		</form>
+        </form>
 
 		<a href="item-list">
 			<button class="btn btn-danger">Cancel</button>
 		</a>
 
 	</div>
+	
+	<script>
+    	$(document).ready(function () {
+    		if(sessionStorage.getItem("loginStatus") == "False"){
+    			window.location.href = "login";
+    		}
+    		
+    	});
+    </script>
 
 	<script>
 		var urlParams = new URLSearchParams(window.location.search);
@@ -137,21 +147,24 @@
 								
 								existingSellerId = result.sellerId;
 								status = result.auctionStatus;
-								timeLeft = result.remainingTime;
+								timeLeft = result.finishTime;
 								
 								var itemData = {
-										name : $("#itemName").val(),
-										condition : $("#condition").val(),
-										description : $("#description").val(),
-										currentPrice: $("#price").val(),
-										shippingPrice: $("#shippingPrice").val(),
-										auctionType: $("#auctionType").val(),
-										sellerId: existingSellerId,
-										auctionStatus: status,
-										remainingTime: timeLeft
-									};
+				 						sellerId: existingSellerId,
+				 						name: $("#itemName").val(),
+				 						condition: $("#condition").val(),
+				 						currentPrice: $("#price").val(),
+				 						shippingPrice: $("#shippingPrice").val(),
+				 						description: $("#description").val(),
+				 						auctionType: $("#auctionType").val(),
+				 						finishTime: timeLeft,
+				 						auctionStatus: status
+				 				};
 									
 								// Update Item
+								
+								
+								//Use this with the countdown to update the auction status of the item.
 								$.ajax({
 									url : "http://localhost:8080/EAuction/items/" + itemId,
 									type : 'PUT',
@@ -184,16 +197,12 @@
 				type: 'GET',
 				success: function (result) {
 					$("#itemName").val(result.name);
-					$("#condition").val(result.condition);
 	                $("#description").val(result.description);
 	                $("#price").val(result.currentPrice);
 	                $("#shippingPrice").val(result.shippingPrice);
 	                $("#auctionType").val(result.auctionType);
-	                
-	                let timeString = result.remainingTime;
-	                let originalTime = parseInt(timeString.substring(0, 2), 10);
-	                
-	                $("#duration").val(originalTime);
+	                document.getElementById('condition').value = result.condition;
+	                document.getElementById('finish').value = result.finishTime;
 				},
 				error: function (error) {
 					console.log(error);

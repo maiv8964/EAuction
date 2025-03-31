@@ -73,6 +73,15 @@
 		</table>
 	</div>
 	
+	<script>
+    	$(document).ready(function () {
+    		if(sessionStorage.getItem("loginStatus") == "False"){
+    			window.location.href = "login";
+    		}
+    		
+    	});
+    </script>
+	
 
 	<script>
 		$(document).ready(function () {
@@ -109,7 +118,7 @@
 						row.append($("<td></td>").text(item.name));
 						row.append($("<td></td>").text("$" + item.currentPrice));
 						row.append($("<td></td>").text(item.auctionType));
-						row.append($("<td></td>").text(item.remainingTime));
+						row.append($("<td></td>").text(item.finishTime));
 						var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
 						row.append(managebuttons);
 						table.append(row);
@@ -163,7 +172,7 @@
 								row.append($("<td></td>").text(item.name));
 								row.append($("<td></td>").text("$" + item.currentPrice));
 								row.append($("<td></td>").text(item.auctionType));
-								row.append($("<td></td>").text(item.remainingTime));
+								row.append($("<td></td>").text(item.finishTime));
 								var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
 								row.append(managebuttons);
 								table.append(row);

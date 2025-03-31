@@ -121,7 +121,7 @@ public class UserDAO implements UserInterface{
 
 	public User loginUser(String username, String password) {
 
-		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country FROM users WHERE username = ? AND password = ?";
+		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country, id FROM users WHERE username = ? AND password = ?";
 
 		User user = null;
 
@@ -142,6 +142,8 @@ public class UserDAO implements UserInterface{
 					user.setPostalCode(rs.getString("postal_code"));
 					user.setCity(rs.getString("city"));
 					user.setCountry(rs.getString("country"));
+					user.setId(rs.getInt("id"));
+					System.out.println(rs.getInt("id"));
 
 				}
 			}

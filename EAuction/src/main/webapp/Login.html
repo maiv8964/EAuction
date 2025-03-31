@@ -85,6 +85,10 @@
 							if(result == null){
 								$("#confirmationMessage").text("Invalid login credentials.")
 							}else{
+
+
+								sessionStorage.setItem("UserID", result.id);
+								sessionStorage.setItem("loginStatus", "True");
 								window.location.href = "item-list";
 							}
 							
