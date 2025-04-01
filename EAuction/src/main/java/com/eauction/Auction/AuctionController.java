@@ -3,7 +3,10 @@ package com.eauction.Auction;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jakarta.ws.rs.core.Response;
 
@@ -20,25 +23,23 @@ public class AuctionController {
     }
     
     @GET    
-    @Path("/{id}/pay")
+    @Path("/{id}/verify-pay")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response payNowPage(@PathParam("id") int auction_id, @QueryParam("userId") int user_id) {
+    public Map<String, Boolean> payNowPage(@PathParam("id") int auction_id, @QueryParam("userId") int user_id) {
         Auction auction = auctionDAO.getAuctionById(auction_id);
+        Map<String, Boolean> result = new HashMap<>();
 
         if (!auction.getAuctionStatus().equals("active")) {
             if (auction.getHighestBidderId() == user_id) {
-                return Response.ok("{\"shippingPrice\": " + auction.getShippingPrice() + ", "+
-                				   "\"highestBidder\": " + auction.getHighestBidderId() + ", " +
-                				   "\"description\": " + auction.getDescription() + ", " +
-                                   "\"WinningPrice\": " + auction.getCurrentPrice() 
-                                   + "}").build();
+           	 	result.put("result", true);
+                return result;
             } else {
-                return Response.status(Response.Status.FORBIDDEN)
-                        .entity("{\"error\": \"You are not the auction winner\"}")
-                        .build();
+           	 	result.put("result", false);
+                return result;
             }
         } else {        	
-        	return Response.status(Response.Status.NOT_FOUND).entity("{\"error\": \"Auction is still active\"}").build();
+        	result.put("result", false);
+            return result;
         }
     }
     
@@ -46,7 +47,9 @@ public class AuctionController {
      @Path("/{id}")
      @Consumes(MediaType.APPLICATION_JSON)
      @Produces(MediaType.APPLICATION_JSON)
-     public void update(@PathParam("id") int id, Auction auction) {
-         auctionDAO.placeBid(id, auction);
+     public Map<String, Boolean> update(@PathParam("id") int id, Auction auction) {
+    	 Map<String, Boolean> result = new HashMap<>();
+    	 result.put("result", auctionDAO.placeBid(id, auction));
+         return result;
      }     
 }

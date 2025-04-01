@@ -1,7 +1,7 @@
 package com.eauction.Shipping;
 
 public interface ShippingInterface {
-    void createShipping(Shipping shipping);
+    Shipping createShipping(Shipping shipping);
     Shipping getShipping(int id);
-    void updateShipping(int id, Shipping shipping);
+    Shipping updateShipping(int id, Shipping shipping);
 }

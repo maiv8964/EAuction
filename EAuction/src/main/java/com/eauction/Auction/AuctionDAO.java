@@ -35,7 +35,7 @@ public class AuctionDAO implements AuctionInterface{
     }
     
     @Override
-	public void placeBid(int id, Auction auction) {
+	public boolean placeBid(int id, Auction auction) {
 	        String selectSql = "SELECT currentPrice, auctionStatus, auctionType FROM items WHERE id = ?";
 	        String updateSql = "UPDATE items SET currentPrice = ?, highestBidderId = ?, auctionStatus = ? WHERE id = ?";
 	
@@ -48,7 +48,6 @@ public class AuctionDAO implements AuctionInterface{
 	                float currentPrice = rs.getFloat("currentPrice");
 	                String auctionStatus = rs.getString("auctionStatus");
 	                String auctionType = rs.getString("auctionType");
-	                
 	                if ((auction.getCurrentPrice() instanceof Float) && auction.getCurrentPrice() >= 0) {
 	 	               if (auctionType.equals("forward")) { //forward auction bidding       	   
 		            	   if (auction.getCurrentPrice() > currentPrice && auctionStatus.equals("active")) {
@@ -59,14 +58,16 @@ public class AuctionDAO implements AuctionInterface{
 		            			   pstmt2.setInt(4, id);
 		            			   pstmt2.executeUpdate();
 		            			   System.out.println("Auction price has been set");
+		            			   return true;
 		            		   }
 		            	   }
 		            	   else {
 		            		   System.out.println("Bid must be higher than current price!");
+		            		   return false;
 		            	   }
 		               }
 		               else if (auctionType.equals("dutch")){ //dutch auction bidding
-		             	   if (auction.getCurrentPrice() > currentPrice && auctionStatus.equals("active")) {
+		             	   if (auctionStatus.equals("active")) {
 		            		   try (PreparedStatement pstmt2 = conn.prepareStatement(updateSql)) {
 		            			   pstmt2.setFloat(1, auction.getCurrentPrice());
 		            			   pstmt2.setInt(2, auction.getHighestBidderId());
@@ -74,20 +75,25 @@ public class AuctionDAO implements AuctionInterface{
 		            			   pstmt2.setInt(4, id);
 		            			   pstmt2.executeUpdate();
 		            			   System.out.println("Bidder wins and auction will be closed");
+		            			   return true;
 		            		   }
 		            	   }
 		            	   else {
 		            		   System.out.println("Bid must be higher than current price!");
+		            		   return false;
 		            	   }
 		            	   
 		               }
 	                }
 	                else {
 	                	System.out.println("ERROR: Issue with input amount");
+	                	return false;
 	                }
 	            }
 	        } catch (SQLException e) {
 	            System.out.println(e.getMessage());
 	        }
+	        
+	        return false;
 	    }
 }

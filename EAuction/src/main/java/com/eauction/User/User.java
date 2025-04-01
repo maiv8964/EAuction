@@ -15,6 +15,15 @@ public class User {
 	private String city;
 	private String country;
 	private String province;
+	private String userType;
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
 
 	public int getId() {
 		return id;

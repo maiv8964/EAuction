@@ -36,7 +36,7 @@ public class PaymentDAO implements PaymentInterface {
 
     @Override
     public Payment getPayment(int id) {
-        String sql = "SELECT * FROM payments WHERE id = ?";
+        String sql = "SELECT * FROM payments WHERE userId = ?";
         Payment payment = null;
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);

@@ -48,9 +48,9 @@
 							a Listing</a></li>
 					<li class="nav-item"><a class="nav-link" href="manage-items">Manage
 							Listings</a></li>
+					<li class="nav-item"><a class="nav-link" href="user-list" id="manage-users">Manage Users</a></li>
 				</ul>
-
-				<a class="nav-link mx-1" href="edit-profile">Edit Profile</a> <a
+					<a
 					href="login">
 					<button type="button" class="btn btn-secondary mx-1">Login</button>
 				</a> <a href="login">
@@ -90,28 +90,78 @@
 
 			<div class="d-flex py-4 text-center justify-content-center">
 				<form id="bidForm">
-					<input type="number" class="form-control" required>
+					<input type="number" class="form-control" id="bidvalue" required>
+					<p class="badge form-control my-2" id="confirmationMessage"></p>
 					<button class="btn btn-success my-4">Bid!</button>
+            	
 				</form>
 			</div>
+			
+			<div class="d-flex py-4 text-center justify-content-center">
+                <button class="btn btn-success my-4" id="buyNowbtn">Buy Now!</button>
+            </div>
 		</div>
 	</div>
 
 	<script>
     	$(document).ready(function () {
-    		if(sessionStorage.getItem("loginStatus") == "False"){
+    		if(sessionStorage.getItem("loginStatus") != "True"){
     			window.location.href = "login";
     		}
     		
+    		if(sessionStorage.getItem("userType") != "admin"){
+    			document.getElementById("manage-users").style.display='none';
+    		}
     	});
+    </script>
+    
+    <script>
+    
+	    const urlParams = new URLSearchParams(window.location.search);
+	    const itemId = urlParams.get("id");
+	    
+   		$("#bidForm").submit(function(e) {
+				e.preventDefault();
+				var bidData = {
+					highestBidderId: sessionStorage.getItem("UserID"),
+					currentPrice: $("#bidvalue").val()
+				};
+				$.ajax({
+					url : "http://localhost:8080/EAuction/auction/" + itemId,
+					type : 'PUT',
+					contentType : 'application/json',
+					data : JSON.stringify(bidData),
+					success : function(result) {
+						
+						console.log(result);
+						if(result.result){
+							document.getElementById("confirmationMessage").classList.remove("text-bg-danger");
+							document.getElementById("confirmationMessage").classList.add("text-bg-success");
+							$("#confirmationMessage").text("Bid successfully placed.");
+							document.getElementById("currentPrice").textContent = "Current Price: $" + bidData.currentPrice;
+							document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + bidData.highestBidderId;
+						}else{
+							document.getElementById("confirmationMessage").classList.remove("text-bg-success");
+							document.getElementById("confirmationMessage").classList.add("text-bg-danger");
+							$("#confirmationMessage").text("Error trying to bid.");
+						}
+					},
+					error : function(error) {
+						console.log(error);
+					}
+				});
+			});
+    
     </script>
 
 	<script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const itemId = urlParams.get("id");
+		
         var endDate;
 
         $(document).ready(function () {
+        	
+        	document.getElementById("buyNowbtn").style.display='none';
+        	
             $.ajax({
                 url: "http://localhost:8080/EAuction/items/" + itemId,
                 type: 'GET',
@@ -121,12 +171,16 @@
                     document.getElementById("description").textContent = result.description;
                     document.getElementById("currentPrice").textContent = "Current Price: $" + result.currentPrice;
                     
+                    console.log(result);
+                    
                     var highestId;
                     if(result.highestBidderId == 0){
 						 highestId = "None";
                     }else{
                     	highestId = result.highestBidderId;
                     }
+                    
+                    console.log(highestId);
                     
                     document.getElementById("highestBidder").textContent = "Highest Bidder ID: " + highestId;
                     
@@ -137,68 +191,100 @@
                 }
             });
             
-            var temp = setInterval(function () {
-                var now = new Date().getTime();
-                var countdown = endDate - now;
-                console.log(countdown);
+            var setInactiveStatus = false;
+        
+	        var temp = setInterval(function () {
+	        	var now = new Date().getTime();
+	        	var countdown = endDate - now;
+	            console.log(countdown);
+	
+	            var days = Math.floor(countdown / (1000 * 60 * 60 * 24));
+	            var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	            var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
+	            var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
+	
+	            document.getElementById("countdown").textContent = days + " Days " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds ";
+	            
+	            if(setInactiveStatus){
+	            	document.getElementById("countdown").textContent = "0 Days 0 Hours 0 Minutes 0 Seconds ";
+	            }
+	            
+	            
+	            if (countdown < 0 && !setInactiveStatus){
+	            	
+					console.log("Time's up!");
+	            	
+	            	document.getElementById("countdown").textContent = "0 Days " + "0 Hours " + "0 Minutes " + "0 Seconds ";
+	            	
+	            	$.ajax({
+	                    url: "http://localhost:8080/EAuction/items/" + itemId,
+	                    type: 'GET',
+	                    success: function (result) {
+	                    	
+	                        status = "inactive";
 
-                var days = Math.floor(countdown / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((countdown % (1000 * 60)) / 1000);
+	                        var itemData = {
+	                            name: result.name,
+	                            condition: result.condition,
+	                            description: result.description,
+	                            currentPrice: result.currentPrice,
+	                            shippingPrice: result.shippingPrice,
+	                            auctionType: result.auctionType,
+	                            sellerId: result.sellerId,
+	                            auctionStatus: status,
+	                            finishTime: result.finishTime,
+	                            highestBidderId: result.highestBidderId
+	                        };
+	                        
+	                        console.log(itemData.highestBidderId);
 
-                
-
-                if (isNaN(countdown)) {
-                    document.getElementById("countdown").textContent = "0 Days " + "0 Hours " + "0 Minutes " + "0 Seconds ";
-                    $.ajax({
-                        url: "http://localhost:8080/EAuction/items/" + itemId,
-                        type: 'GET',
-                        success: function (result) {
-
-                            existingSellerId = result.sellerId; //Delete?
-                            status = "inactive";
-                            timeLeft = result.finishTime; //Delete?
-
-                            var itemData = {
-                                name: "sanity check",
-                                condition: result.condition,
-                                description: result.description,
-                                currentPrice: result.currentPrice,
-                                shippingPrice: result.shippingPrice,
-                                auctionType: result.auctionType,
-                                sellerId: result.sellerId,
-                                auctionStatus: status,
-                                finishTime: result.finishTime
-                            };
-
-                            // Update Item
-
-
-                            //Use this with the countdown to update the auction status of the item.
-                            $.ajax({
-                                url: "http://localhost:8080/EAuction/items/" + itemId,
-                                type: 'PUT',
-                                contentType: 'application/json',
-                                data: JSON.stringify(itemData),
-                                success: function (result) {
-                                    alert("Updated sucessfully.");
-                                    // window.location.href = "item-list";
-                                },
-                                error: function (error) {
-                                    console.log(error);
-                                }
-                            });
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        }
-                    });
-                }
-                else {
-                    document.getElementById("countdown").textContent = days + " Days " + hours + " Hours " + minutes + " Minutes " + seconds + " Seconds ";
-                }
-            }, 1000);
+	                        // Update Item
+	                        $.ajax({
+	                            url: "http://localhost:8080/EAuction/items/" + itemId,
+	                            type: 'PUT',
+	                            contentType: 'application/json',
+	                            data: JSON.stringify(itemData),
+	                            success: function (result) {
+	                            	setInactiveStatus = true;
+	                                alert("Time's Up!");
+	                                document.getElementById("buyNowbtn").style.display='block';
+	                                
+	                                // Reroute to payment for winner
+	                                document.getElementById("buyNowbtn").addEventListener("click", function() {
+	                                	
+	                                	
+	                                	$.ajax({
+	        	                            url: "http://localhost:8080/EAuction/auction/" + itemId + "/verify-pay?userId=" + sessionStorage.getItem("UserID"),
+	        	                            type: 'GET',
+	        	                            contentType: 'application/json',
+	        	                            success: function (result) {
+	        	                            	
+	        	                            		if(result.result){
+	        	                            			window.location.href = "checkout?itemid=" + urlParams.get("id");
+	        	                            		}else{
+	        	                            			alert("You are not the winner of this listing!");
+	        	                            		}
+	        	                        	    
+	        	                            },
+	        	                            error: function (error) {
+	        	                                console.log(error);
+	        	                            }
+	        	                        });
+	                        	    });
+	                            },
+	                            error: function (error) {
+	                                console.log(error);
+	                            }
+	                        });
+	                    },
+	                    error: function (error) {
+	                        console.log(error);
+	                    }
+	                });
+	            }
+	            
+	        }, 1000);
+            
         });
     </script>
 

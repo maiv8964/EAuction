@@ -7,7 +7,7 @@ import com.eauction.DatabaseConnection;
 public class ReceiptDAO implements ReceiptInterface {
 
     @Override
-    public void createReceipt(Receipt receipt) {
+    public Receipt createReceipt(Receipt receipt) {
         String sql = "INSERT INTO receipts (userId, paymentId, dateIssued, totalAmount) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, receipt.getUserId());
@@ -18,6 +18,8 @@ public class ReceiptDAO implements ReceiptInterface {
         } catch (SQLException e) {
             System.out.println("Error inserting receipt: " + e.getMessage());
         }
+        
+        return receipt;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class ReceiptDAO implements ReceiptInterface {
     }
 
     @Override
-    public void updateReceipt(int id, Receipt receipt) {
+    public Receipt updateReceipt(int id, Receipt receipt) {
         String sql = "UPDATE receipts SET userId = ?, paymentId = ?, dateIssued = ?, totalAmount = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, receipt.getUserId());
@@ -54,5 +56,7 @@ public class ReceiptDAO implements ReceiptInterface {
         } catch (SQLException e) {
             System.out.println("Error updating receipt: " + e.getMessage());
         }
+        
+        return receipt;
     }
 }

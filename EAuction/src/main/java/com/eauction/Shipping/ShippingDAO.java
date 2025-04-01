@@ -7,7 +7,7 @@ import com.eauction.DatabaseConnection;
 public class ShippingDAO implements ShippingInterface {
 
     @Override
-    public void createShipping(Shipping shipping) {
+    public Shipping createShipping(Shipping shipping) {
         String sql = "INSERT INTO shipping (userId, itemId, shippingAddress, trackingNumber, estimatedDelivery) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, shipping.getUserId());
@@ -19,6 +19,27 @@ public class ShippingDAO implements ShippingInterface {
         } catch (SQLException e) {
             System.out.println("Error inserting shipping details: " + e.getMessage());
         }
+        
+        String sqlGet = "SELECT * FROM shipping WHERE userId = ? AND itemId = ?";
+        Shipping shippinginfo = null;
+        try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sqlGet)) {
+            pstmt.setInt(1, shipping.getUserId());
+            pstmt.setInt(2, shipping.getItemId());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                shippinginfo = new Shipping();
+                shippinginfo.setId(rs.getInt("id"));
+                shippinginfo.setUserId(rs.getInt("userId"));
+                shippinginfo.setItemId(rs.getInt("itemId"));
+                shippinginfo.setShippingAddress(rs.getString("shippingAddress"));
+                shippinginfo.setTrackingNumber(rs.getString("trackingNumber"));
+                shippinginfo.setEstimatedDelivery(rs.getString("estimatedDelivery"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching shipping details: " + e.getMessage());
+        }
+        
+        return shippinginfo;
     }
 
     @Override
@@ -44,7 +65,7 @@ public class ShippingDAO implements ShippingInterface {
     }
 
     @Override
-    public void updateShipping(int id, Shipping shipping) {
+    public Shipping updateShipping(int id, Shipping shipping) {
         String sql = "UPDATE shipping SET userId = ?, itemId = ?, shippingAddress = ?, trackingNumber = ?, estimatedDelivery = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, shipping.getUserId());
@@ -57,5 +78,7 @@ public class ShippingDAO implements ShippingInterface {
         } catch (SQLException e) {
             System.out.println("Error updating shipping details: " + e.getMessage());
         }
+        
+        return shipping;
     }
 }
