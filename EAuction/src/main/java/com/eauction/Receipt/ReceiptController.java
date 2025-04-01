@@ -10,8 +10,8 @@ public class ReceiptController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void generateReceipt(Receipt receipt) {
-        receiptDAO.createReceipt(receipt);
+    public Receipt generateReceipt(Receipt receipt) {
+        return receiptDAO.createReceipt(receipt);
     }
 
     @GET
@@ -25,7 +25,7 @@ public class ReceiptController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void updateReceipt(@PathParam("id") int id, Receipt receipt) {
-        receiptDAO.updateReceipt(id, receipt);
+    public Receipt updateReceipt(@PathParam("id") int id, Receipt receipt) {
+        return receiptDAO.updateReceipt(id, receipt);
     }
 }

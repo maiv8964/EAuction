@@ -36,16 +36,11 @@
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
 				<a class="navbar-brand" href="item-list">EAuction</a>
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="item-list">Home</a></li>
+					<li class="nav-item"><a class="nav-link" aria-current="page" href="item-list">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="add-item">Post a Listing</a></li>
-					<li class="nav-item"><a class="nav-link" href="manage-items">Manage Listings</a></li>
+					<li class="nav-item"><a class="nav-link active" href="manage-items">Manage Listings</a></li>
+					<li class="nav-item"><a class="nav-link" href="user-list" id="manage-users">Manage Users</a></li>
 				</ul>
-
-				<a class="nav-link mx-1" href="edit-profile">Edit Profile</a>
-				<a href="login">
-					<button type="button" class="btn btn-secondary mx-1">Login</button>
-				</a>
-				
 				<a href="login">
 					<button type="button" class="btn btn-danger mx-1">Logout</button>
 				</a>
@@ -61,6 +56,7 @@
 					<th>Current Price</th>
 					<th>Auction Type</th>
 					<th>Remaining Time</th>
+					<th>Auction Status</th>
 					<th>Options</th>
 				</tr>
 			</thead>
@@ -75,10 +71,13 @@
 	
 	<script>
     	$(document).ready(function () {
-    		if(sessionStorage.getItem("loginStatus") == "False"){
+    		if(sessionStorage.getItem("loginStatus") != "True"){
     			window.location.href = "login";
     		}
     		
+    		if(sessionStorage.getItem("userType") != "admin"){
+    			document.getElementById("manage-users").style.display='none';
+    		}
     	});
     </script>
 	
@@ -91,37 +90,76 @@
 				success: function (result) {
 					var table = $("#itemlist");
 					result.forEach(function (item) {
-
-						var editbutton = document.createElement("button");
-						editbutton.innerText = "Edit";
-						editbutton.classList.add("btn", "btn-success", "mx-1");
-
-						editbutton.addEventListener("click", function () {							
-							window.location.href = "edit-item?id=" + item.id;
-						});
 						
-						var deletebutton = document.createElement("button");
-						deletebutton.innerText = "Delete";
-						deletebutton.classList.add("btn", "btn-danger", "mx-1");
-						deletebutton.addEventListener("click", function () {
-							
-							let result = confirm("Delete Item ID: " + item.id + "?");
-				            if (result === true) {
-				                console.log("User clicked OK");
-				                deleteItem(item.id);
-				            } else {
-				                console.log("User clicked Cancel");
-				            }
-						});
+						if(sessionStorage.getItem("userType") == "user"){ // Only view items listed by the user
+							if(item.sellerId == sessionStorage.getItem("UserID")){
+								var editbutton = document.createElement("button");
+								editbutton.innerText = "Edit";
+								editbutton.classList.add("btn", "btn-success", "mx-1");
 
-						var row = $("<tr></tr>");
-						row.append($("<td></td>").text(item.name));
-						row.append($("<td></td>").text("$" + item.currentPrice));
-						row.append($("<td></td>").text(item.auctionType));
-						row.append($("<td></td>").text(item.finishTime));
-						var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
-						row.append(managebuttons);
-						table.append(row);
+								editbutton.addEventListener("click", function () {							
+									window.location.href = "edit-item?id=" + item.id;
+								});
+								
+								var deletebutton = document.createElement("button");
+								deletebutton.innerText = "Delete";
+								deletebutton.classList.add("btn", "btn-danger", "mx-1");
+								deletebutton.addEventListener("click", function () {
+									
+									let result = confirm("Delete Item ID: " + item.id + "?");
+						            if (result === true) {
+						                console.log("User clicked OK");
+						                deleteItem(item.id);
+						            } else {
+						                console.log("User clicked Cancel");
+						            }
+								});
+
+								var row = $("<tr></tr>");
+								row.append($("<td></td>").text(item.name));
+								row.append($("<td></td>").text("$" + item.currentPrice));
+								row.append($("<td></td>").text(item.auctionType));
+								row.append($("<td></td>").text(item.finishTime));
+								row.append($("<td></td>").text(item.auctionStatus));
+								var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
+								row.append(managebuttons);
+								table.append(row);
+								
+							}
+						}else{ // View all listings as admin
+							var editbutton = document.createElement("button");
+							editbutton.innerText = "Edit";
+							editbutton.classList.add("btn", "btn-success", "mx-1");
+
+							editbutton.addEventListener("click", function () {							
+								window.location.href = "edit-item?id=" + item.id;
+							});
+							
+							var deletebutton = document.createElement("button");
+							deletebutton.innerText = "Delete";
+							deletebutton.classList.add("btn", "btn-danger", "mx-1");
+							deletebutton.addEventListener("click", function () {
+								
+								let result = confirm("Delete Item ID: " + item.id + "?");
+					            if (result === true) {
+					                console.log("User clicked OK");
+					                deleteItem(item.id);
+					            } else {
+					                console.log("User clicked Cancel");
+					            }
+							});
+
+							var row = $("<tr></tr>");
+							row.append($("<td></td>").text(item.name));
+							row.append($("<td></td>").text("$" + item.currentPrice));
+							row.append($("<td></td>").text(item.auctionType));
+							row.append($("<td></td>").text(item.finishTime));
+							row.append($("<td></td>").text(item.auctionStatus));
+							var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
+							row.append(managebuttons);
+							table.append(row);
+						}
+
 					});
 				},
 				error: function (error) {
@@ -173,6 +211,7 @@
 								row.append($("<td></td>").text("$" + item.currentPrice));
 								row.append($("<td></td>").text(item.auctionType));
 								row.append($("<td></td>").text(item.finishTime));
+								row.append($("<td></td>").text(item.auctionStatus));
 								var managebuttons = $("<td></td>").append(editbutton).append(deletebutton);
 								row.append(managebuttons);
 								table.append(row);

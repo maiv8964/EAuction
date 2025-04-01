@@ -10,8 +10,8 @@ public class ShippingController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createShipping(Shipping shipping) {
-        shippingDAO.createShipping(shipping);
+    public Shipping createShipping(Shipping shipping) {
+        return shippingDAO.createShipping(shipping);
     }
 
     @GET
@@ -25,7 +25,7 @@ public class ShippingController {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void updateShipping(@PathParam("id") int id, Shipping shipping) {
-        shippingDAO.updateShipping(id, shipping);
+    public Shipping updateShipping(@PathParam("id") int id, Shipping shipping) {
+        return shippingDAO.updateShipping(id, shipping);
     }
 }

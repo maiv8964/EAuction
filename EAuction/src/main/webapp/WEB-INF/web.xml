@@ -117,13 +117,13 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>EditProfile</servlet-name>
-		<jsp-file>/EditProfile.html</jsp-file>
+		<servlet-name>UserList</servlet-name>
+		<jsp-file>/ManageProfiles.html</jsp-file>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>EditProfile</servlet-name>
-		<url-pattern>/edit-profile</url-pattern>
+		<servlet-name>UserList</servlet-name>
+		<url-pattern>/user-list</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -134,6 +134,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	<servlet-mapping>
 		<servlet-name>Checkout</servlet-name>
 		<url-pattern>/checkout</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ReceiptShipping</servlet-name>
+		<jsp-file>/ReceiptShipping.html</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ReceiptShipping</servlet-name>
+		<url-pattern>/receipt</url-pattern>
 	</servlet-mapping>
 	
 </web-app>

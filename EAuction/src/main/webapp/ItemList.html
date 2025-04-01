@@ -39,12 +39,8 @@
 					<li class="nav-item"><a class="nav-link active" aria-current="page" href="item-list">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="add-item">Post a Listing</a></li>
 					<li class="nav-item"><a class="nav-link" href="manage-items">Manage Listings</a></li>
+					<li class="nav-item"><a class="nav-link" href="user-list" id="manage-users">Manage Users</a></li>
 				</ul>
-
-				<a class="nav-link mx-1" href="edit-profile">Edit Profile</a>
-				<a href="login">
-					<button type="button" class="btn btn-secondary mx-1">Login</button>
-				</a>
 				<a href="login">
 					<button type="button" class="btn btn-danger mx-1" onclick="logout()">Logout</button>
 				</a>
@@ -86,92 +82,83 @@
 			</tbody>
 		</table>
 	</div>
+	
+	<script>
+    	$(document).ready(function () {
+    		if(sessionStorage.getItem("loginStatus") != "True"){
+    			window.location.href = "login";
+    		}
+    		
+    		if(sessionStorage.getItem("userType") != "admin"){
+    			document.getElementById("manage-users").style.display='none';
+    		}
+    	});
+    </script>
 
 	<script>
-		$("#SearchItemForm")
-				.submit(
-						function(e) {
-							e.preventDefault();
-							var query = $("#query").val();
+		$("#SearchItemForm").submit(function(e) {
+			e.preventDefault();
+			var query = $("#query").val();
 
-							$
-									.ajax({
-										url : "http://localhost:8080/EAuction/items/search/?q="
-												+ query,
-										type : 'GET',
-										success : function(result) {
+			$.ajax({
+				url : "http://localhost:8080/EAuction/items/search/?q=" + query,
+				type : 'GET',
+				success : function(result) {
 
-											if (result.length == 0) {
+					if (result.length == 0) {
 
-												alert("No search results found.");
+						alert("No search results found.");
 
-											} else {
+					} else {
 
-												var table = $("#itemlist")
-														.empty();
+						var table = $("#itemlist").empty();
 
-												result
-														.forEach(function(item) {
-															var detailsbutton = document
-																	.createElement("button");
-															detailsbutton.innerText = "View Details";
-															detailsbutton.classList
-																	.add("btn",
-																			"btn-success");
-
-															detailsbutton
-																	.addEventListener(
-																			"click",
-																			function() {
-
-																				if (item.auctionType == "dutch") {
-																					window.location.href = "item-detail-dutch?id="
-																							+ item.id;
-																				}
-
-																				if (item.auctionType == "forward") {
-																					window.location.href = "item-detail-forward?id="
-																							+ item.id;
-																				}
-																			});
-
-															var row = $("<tr></tr>");
-															row
-																	.append($(
-																			"<td></td>")
-																			.text(
-																					item.name));
-															row
-																	.append($(
-																			"<td></td>")
-																			.text(
-																					"$"
-																							+ item.currentPrice));
-															row
-																	.append($(
-																			"<td></td>")
-																			.text(
-																					item.auctionType));
-															row
-																	.append($(
-																			"<td></td>")
-																			.text(
-																					item.finishTime));
-															detailsbutton = $(
-																	"<td></td>")
-																	.append(
-																			detailsbutton);
-															row
-																	.append(detailsbutton);
-															table.append(row);
-														});
-											}
-										},
-										error : function(error) {
-											console.log(error);
-										}
-									});
+						result.forEach(function(item) {
+															
+						if(item.auctionStatus == "active"){
+																
+							var detailsbutton = document.createElement("button");
+							detailsbutton.innerText = "View Details";
+							detailsbutton.classList.add("btn","btn-success");
+			
+							detailsbutton.addEventListener("click", function() {
+			
+								if (item.auctionType == "dutch") {
+									window.location.href = "item-detail-dutch?id=" + item.id;
+								}
+			
+								if (item.auctionType == "forward") {
+									window.location.href = "item-detail-forward?id=" + item.id;
+								}
+							});
+			
+							var row = $("<tr></tr>");
+							row.append($("<td></td>").text(item.name));
+							row.append($("<td></td>").text("$" + item.currentPrice));
+							row.append($("<td></td>").text(item.auctionType));
+							
+							if (item.auctionType == "dutch") {
+								row.append($("<td></td>").text(""));
+							}
+		
+							if (item.auctionType == "forward") {
+								row.append($("<td></td>").text(item.finishTime));
+							}
+							
+							detailsbutton = $("<td></td>").append(detailsbutton);
+							row.append(detailsbutton);
+							table.append(row);
+																
+							}
+																
 						});
+					}
+				},
+				error : function(error) {
+					console.log(error);
+				}
+			});
+		});
 	</script>
 
 	<script>
@@ -184,37 +171,51 @@
 					
 					var table = $("#itemlist");
 					result.forEach(function (item) {
-	
-						var detailsbutton = document.createElement("button");
-						detailsbutton.innerText = "View Details";
-						detailsbutton.classList.add("btn", "btn-success");
-
-						detailsbutton.addEventListener("click", function () {
+											
+						if(item.auctionStatus == "active"){
 							
-							if(item.auctionType == "dutch"){
-								window.location.href = "item-detail-dutch?id=" + item.id;
+							var detailsbutton = document.createElement("button");
+							detailsbutton.innerText = "View Details";
+							detailsbutton.classList.add("btn","btn-success");
+					
+							detailsbutton.addEventListener("click", function() {
+					
+								if (item.auctionType == "dutch") {
+									window.location.href = "item-detail-dutch?id=" + item.id;
+								}
+					
+								if (item.auctionType == "forward") {
+									window.location.href = "item-detail-forward?id=" + item.id;
+								}
+							});
+					
+							var row = $("<tr></tr>");
+							row.append($("<td></td>").text(item.name));
+							row.append($("<td></td>").text("$" + item.currentPrice));
+							row.append($("<td></td>").text(item.auctionType));
+							
+							if (item.auctionType == "dutch") {
+								row.append($("<td></td>").text(""));
+							}
+					
+							if (item.auctionType == "forward") {
+								row.append($("<td></td>").text(item.finishTime));
 							}
 							
-							if(item.auctionType == "forward"){
-								window.location.href = "item-detail-forward?id=" + item.id;
-							}
-						});
+							detailsbutton = $("<td></td>").append(detailsbutton);
+							row.append(detailsbutton);
+							table.append(row);
+																
+						}
 
-						var row = $("<tr></tr>");
-						row.append($("<td></td>").text(item.name));
-						row.append($("<td></td>").text("$" + item.currentPrice));
-						row.append($("<td></td>").text(item.auctionType));
-						row.append($("<td></td>").text(item.finishTime));
-						detailsbutton = $("<td></td>").append(detailsbutton);
-						row.append(detailsbutton);
-						table.append(row);
 					});
-				},
-				error: function (error) {
-					console.log(error);
-				}
+
+					},
+					error: function (error) {
+						console.log(error);
+					}
+				});
 			});
-		});
 		}
 		else {
 			window.location.href = "login";

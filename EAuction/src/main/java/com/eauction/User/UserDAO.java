@@ -8,7 +8,7 @@ import com.eauction.DatabaseConnection;
 
 public class UserDAO implements UserInterface{
 	public List<User> readAllUsers() {
-		String sql = "SELECT id, username, password, first_name, last_name, address, postal_code, city, country, province FROM users";
+		String sql = "SELECT id, username, password, first_name, last_name, address, postal_code, city, country, province, userType FROM users";
 		List<User> users = new ArrayList<>();
 
 		try (Connection conn = DatabaseConnection.connect();
@@ -27,6 +27,7 @@ public class UserDAO implements UserInterface{
 				user.setCity(rs.getString("city"));
 				user.setCountry(rs.getString("country"));
 				user.setProvince(rs.getString("province"));
+				user.setUserType(rs.getString("userType"));
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -60,7 +61,7 @@ public class UserDAO implements UserInterface{
 
 	public User readUserId(int id) {
 
-		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country, province FROM users WHERE id = ?";
+		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country, province, userType FROM users WHERE id = ?";
 		User user = null;
 		try (Connection conn = DatabaseConnection.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -79,6 +80,7 @@ public class UserDAO implements UserInterface{
 					user.setCity(rs.getString("city"));
 					user.setCountry(rs.getString("country"));
 					user.setProvince(rs.getString("province"));
+					user.setUserType(rs.getString("userType"));
 				}
 			}
 		} catch (SQLException e) {
@@ -121,7 +123,7 @@ public class UserDAO implements UserInterface{
 
 	public User loginUser(String username, String password) {
 
-		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country, id FROM users WHERE username = ? AND password = ?";
+		String sql = "SELECT username, password, first_name, last_name, address, postal_code, city, country, id, userType FROM users WHERE username = ? AND password = ?";
 
 		User user = null;
 
@@ -143,6 +145,7 @@ public class UserDAO implements UserInterface{
 					user.setCity(rs.getString("city"));
 					user.setCountry(rs.getString("country"));
 					user.setId(rs.getInt("id"));
+					user.setUserType(rs.getString("userType"));
 				}
 			}
 		} catch (SQLException e) {
