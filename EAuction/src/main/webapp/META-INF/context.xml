@@ -5,7 +5,7 @@
 	<Resource name="jdbc/EECS"
 		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
 		type="javax.sql.DataSource" driverClassName="org.sqlite.JDBC"
-		url="jdbc:sqlite:C:\Users\jordi\Documents\GitHub\EAuction\EAuction\EAuction\src\eAuctiondb.db" />
+		url="jdbc:sqlite:/app/eAuctiondb.db"/>
 	<ResourceLink global="jdbc/EECS" name="jdbc/EECS"
 		type="javax.sql.DataSource" />
 </Context>
