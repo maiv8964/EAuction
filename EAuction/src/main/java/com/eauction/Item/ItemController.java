@@ -51,7 +51,10 @@ public class ItemController {
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteItem(@PathParam("id") int id) {
+	public Item deleteItem(@PathParam("id") int id) {
+		Item output = itemDAO.readItemId(id);
 		itemDAO.deleteItem(id);
+		
+		return output;
 	}
 }
