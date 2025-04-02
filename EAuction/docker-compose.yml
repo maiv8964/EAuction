@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  eauction:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./eAuctiondb.db:/app/eAuctiondb.db
+    environment:
+      - DB_PATH=/app/eAuctiondb.db
